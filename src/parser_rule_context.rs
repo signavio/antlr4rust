@@ -158,7 +158,7 @@ pub struct BaseParserRuleContext<Ctx: CustomRuleContext> {
 
     start: RefCell<OwningToken>,
     stop: RefCell<OwningToken>,
-    exception: Option<Box<ANTLRError>>,
+    exception: RefCell<Option<Box<ANTLRError>>>,
     /// List of children of current node
     pub(crate) children: RefCell<Vec<ParserRuleContextType>>,
 }
@@ -218,9 +218,8 @@ impl<Ctx: CustomRuleContext> BorrowMut<Ctx> for BaseParserRuleContext<Ctx> {
 }
 
 impl<Ctx: CustomRuleContext> ParserRuleContext for BaseParserRuleContext<Ctx> {
-    fn set_exception(&self, _e: ANTLRError) {
-        unimplemented!()
-//        self.exception = Some(Box::new(e));
+    fn set_exception(&self, e: ANTLRError) {
+        *self.exception.borrow_mut() = Some(Box::new(e));
     }
 
     fn set_start(&self, t: Option<OwningToken>) {
@@ -340,7 +339,7 @@ impl<Ctx: CustomRuleContext> BaseParserRuleContext<Ctx> {
             base: BaseRuleContext::new_ctx(parent_ctx, invoking_state, ext),
             start: RefCell::new((**INVALID_TOKEN).clone()),
             stop: RefCell::new((**INVALID_TOKEN).clone()),
-            exception: None,
+            exception: RefCell::new(None),
             children: RefCell::new(vec![]),
         }
     }
@@ -349,7 +348,7 @@ impl<Ctx: CustomRuleContext> BaseParserRuleContext<Ctx> {
             base: BaseRuleContext::new_ctx(ctx.get_parent_ctx(), ctx.get_invoking_state(), ext),
             start: RefCell::new(ctx.get_start().clone()),
             stop: RefCell::new(ctx.get_stop().clone()),
-            exception: None,
+            exception: RefCell::new(None),
             children: RefCell::new(ctx.get_children().iter().cloned().collect()),
         }
     }

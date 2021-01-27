@@ -234,7 +234,7 @@ pub struct BaseParserRuleContext<'input, Ctx: CustomRuleContext<'input>> {
     start: RefCell<<Ctx::TF as TokenFactory<'input>>::Tok>,
     stop: RefCell<<Ctx::TF as TokenFactory<'input>>::Tok>,
     /// error if there was any in this node
-    pub exception: Option<Box<ANTLRError>>,
+    pub exception: RefCell<Option<Box<ANTLRError>>>,
     /// List of children of current node
     pub(crate) children: RefCell<Vec<Rc<<Ctx::Ctx as ParserNodeType<'input>>::Type>>>,
 }
@@ -302,7 +302,8 @@ impl<'input, Ctx: CustomRuleContext<'input>> BorrowMut<Ctx> for BaseParserRuleCo
 impl<'input, Ctx: CustomRuleContext<'input> + TidAble<'input>> ParserRuleContext<'input>
     for BaseParserRuleContext<'input, Ctx>
 {
-    fn set_exception(&self, _e: ANTLRError) { /*self.exception = Some(Box::new(e));*/
+    fn set_exception(&self, e: ANTLRError) {
+        *self.exception.borrow_mut() = Some(Box::new(e));
     }
 
     fn set_start(&self, t: Option<<Ctx::TF as TokenFactory<'input>>::Tok>) {
@@ -433,7 +434,7 @@ impl<'input, Ctx: CustomRuleContext<'input> + 'input> BaseParserRuleContext<'inp
             base: BaseRuleContext::new_parser_ctx(parent_ctx, invoking_state, ext),
             start: RefCell::new(Ctx::TF::create_invalid()),
             stop: RefCell::new(Ctx::TF::create_invalid()),
-            exception: None,
+            exception: RefCell::new(None),
             children: RefCell::new(vec![]),
         }
     }
@@ -449,7 +450,7 @@ impl<'input, Ctx: CustomRuleContext<'input> + 'input> BaseParserRuleContext<'inp
             ),
             start: RefCell::new(ctx.start_mut().clone()),
             stop: RefCell::new(ctx.stop_mut().clone()),
-            exception: None,
+            exception: RefCell::new(None),
             children: RefCell::new(ctx.get_children().collect()),
         }
     }

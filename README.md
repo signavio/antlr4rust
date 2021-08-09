@@ -1,3 +1,7 @@
+# NOTICE
+
+This is a fork of https://github.com/rrevenantt/antlr4rust because rrevenantt does not appear to be maintaining it.
+
 # antlr4rust
 [![Crate](https://flat.badgen.net/crates/v/antlr-rust)](https://crates.io/crates/antlr_rust/0.2.0)
 [![docs](https://flat.badgen.net/badge/docs.rs/v0.2.0)](https://docs.rs/antlr-rust/0.2.0)

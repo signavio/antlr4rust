@@ -21,11 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          repository: signavio/antlr4
+          repository: rrevenantt/antlr4
           ref: rust-target
           submodules: true
       - run: |
-          git fetch origin $GITHUB_REF
+          git fetch origin $GITHUB_BASE_REF
           git checkout FETCH_HEAD
         working-directory: runtime/Rust
       - name: Set up JDK 1.8

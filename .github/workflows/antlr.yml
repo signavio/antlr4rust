@@ -25,7 +25,8 @@ jobs:
           ref: rust-target
           submodules: true
       - run: |
-          git fetch origin $GITHUB_REF
+          git remote add signavio_fork git@github.com:signavio/antlr4rust.git
+          git fetch signavio_fork $GITHUB_REF
           git checkout FETCH_HEAD
         working-directory: runtime/Rust
       - name: Set up JDK 1.8

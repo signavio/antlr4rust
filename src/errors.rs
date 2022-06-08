@@ -216,7 +216,7 @@ impl InputMisMatchError {
 
 /// See `ANTLRError::PredicateError`
 #[derive(Debug, Clone)]
-#[allow(missing_docs)]
+#[allow(missing_docs, unused)]
 pub struct FailedPredicateError {
     pub base: BaseRecognitionError,
     pub rule_index: isize,

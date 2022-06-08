@@ -1,3 +1,4 @@
+#[allow(unused)]
 #[derive(Debug)]
 pub struct ATNDeserializationOptions {
     read_only: bool,

@@ -73,8 +73,7 @@ pub trait ParseTree<'input>: Tree<'input> {
     /// (root child1 .. childN). Print just a node if this is a leaf.
     /// We have to know the recognizer so we can get rule names.
     fn to_string_tree(
-        &self,
-        r: &dyn Recognizer<'input, TF = Self::TF, Node = Self::Ctx>,
+        &self, r: &dyn Recognizer<'input, TF = Self::TF, Node = Self::Ctx>,
     ) -> String {
         trees::string_tree(self, r.get_rule_names())
     }

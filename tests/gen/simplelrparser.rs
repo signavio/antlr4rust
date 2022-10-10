@@ -40,7 +40,7 @@ pub const ID: isize = 1;
 pub const WS: isize = 2;
 pub const RULE_s: usize = 0;
 pub const RULE_a: usize = 1;
-pub const ruleNames: [&'static str; 2] = ["s", "a"];
+pub const ruleNames: [&str; 2] = ["s", "a"];
 
 pub const _LITERAL_NAMES: [Option<&'static str>; 0] = [];
 pub const _SYMBOLIC_NAMES: [Option<&'static str>; 3] = [None, Some("ID"), Some("WS")];
@@ -191,10 +191,8 @@ impl<'input, I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'i
 
     fn get_vocabulary(&self) -> &dyn Vocabulary { &**VOCABULARY }
     fn sempred(
-        _localctx: Option<&(dyn SimpleLRParserContext<'input> + 'input)>,
-        rule_index: isize,
-        pred_index: isize,
-        recog: &mut BaseParserType<'input, I>,
+        _localctx: Option<&(dyn SimpleLRParserContext<'input> + 'input)>, rule_index: isize,
+        pred_index: isize, recog: &mut BaseParserType<'input, I>,
     ) -> bool {
         match rule_index {
             1 => SimpleLRParser::<'input, I, _>::a_sempred(
@@ -212,8 +210,7 @@ where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
 {
     fn a_sempred(
-        _localctx: Option<&AContext<'input>>,
-        pred_index: isize,
+        _localctx: Option<&AContext<'input>>, pred_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) -> bool {
         match pred_index {
@@ -251,8 +248,7 @@ antlr_rust::type_id! {SContextExt<'a>}
 
 impl<'input> SContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<SContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -341,8 +337,7 @@ antlr_rust::type_id! {AContextExt<'a>}
 
 impl<'input> AContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<AContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -463,7 +458,7 @@ lazy_static! {
     };
 }
 
-const _serializedATN: &'static str =
+const _serializedATN: &str =
     "\x03\u{608b}\u{a72a}\u{8133}\u{b9ed}\u{417c}\u{3be7}\u{7786}\u{5964}\x03\
 	\x04\x13\x04\x02\x09\x02\x04\x03\x09\x03\x03\x02\x03\x02\x03\x03\x03\x03\
 	\x03\x03\x03\x03\x03\x03\x07\x03\x0e\x0a\x03\x0c\x03\x0e\x03\x11\x0b\x03\

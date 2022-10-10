@@ -25,10 +25,7 @@ impl LL1Analyzer<'_> {
     //    fn get_decision_lookahead(&self, _s: &dyn ATNState) -> &Vec<IntervalSet> { unimplemented!() }
 
     pub fn look<'input, Ctx: ParserNodeType<'input>>(
-        &self,
-        s: &dyn ATNState,
-        stop_state: Option<&dyn ATNState>,
-        ctx: Option<&Ctx::Type>,
+        &self, s: &dyn ATNState, stop_state: Option<&dyn ATNState>, ctx: Option<&Ctx::Type>,
     ) -> IntervalSet {
         let mut r = IntervalSet::new();
         let look_ctx = ctx.map(|x| PredictionContext::from_rule_context::<Ctx>(self.atn, x));

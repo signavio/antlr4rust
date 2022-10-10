@@ -30,11 +30,11 @@ use std::sync::Arc;
 
 pub const ID: isize = 1;
 pub const WS: isize = 2;
-pub const channelNames: [&'static str; 0 + 2] = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN"];
+pub const channelNames: [&str; 2] = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN"];
 
-pub const modeNames: [&'static str; 1] = ["DEFAULT_MODE"];
+pub const modeNames: [&str; 1] = ["DEFAULT_MODE"];
 
-pub const ruleNames: [&'static str; 2] = ["ID", "WS"];
+pub const ruleNames: [&str; 2] = ["ID", "WS"];
 
 pub const _LITERAL_NAMES: [Option<&'static str>; 0] = [];
 pub const _SYMBOLIC_NAMES: [Option<&'static str>; 3] = [None, Some("ID"), Some("WS")];
@@ -156,7 +156,7 @@ lazy_static! {
     };
 }
 
-const _serializedATN: &'static str =
+const _serializedATN: &str =
     "\x03\u{608b}\u{a72a}\u{8133}\u{b9ed}\u{417c}\u{3be7}\u{7786}\u{5964}\x02\
 		\x04\x10\x08\x01\x04\x02\x09\x02\x04\x03\x09\x03\x03\x02\x06\x02\x09\x0a\
 		\x02\x0d\x02\x0e\x02\x0a\x03\x03\x03\x03\x03\x03\x03\x03\x02\x02\x04\x03\

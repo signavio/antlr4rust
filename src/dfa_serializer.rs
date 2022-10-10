@@ -31,8 +31,7 @@ impl Display for DFASerializer<'_, '_> {
 
 impl DFASerializer<'_, '_> {
     pub fn new<'a, 'b>(
-        dfa: &'a DFA,
-        get_edge_label: &'b dyn Fn(usize) -> String,
+        dfa: &'a DFA, get_edge_label: &'b dyn Fn(usize) -> String,
     ) -> DFASerializer<'a, 'b> {
         DFASerializer {
             dfa,

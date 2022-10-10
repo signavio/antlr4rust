@@ -85,9 +85,7 @@ impl ATN {
     /// the rule surrounding `s`. In other words, the set will be
     /// restricted to tokens reachable staying within `s`'s rule.
     pub fn next_tokens_in_ctx<'a, Ctx: ParserNodeType<'a>>(
-        &self,
-        s: &dyn ATNState,
-        _ctx: Option<&Ctx::Type>,
+        &self, s: &dyn ATNState, _ctx: Option<&Ctx::Type>,
     ) -> IntervalSet {
         let analyzer = LL1Analyzer::new(self);
         analyzer.look::<Ctx>(s, None, _ctx)

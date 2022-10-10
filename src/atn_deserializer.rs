@@ -241,10 +241,7 @@ impl ATNDeserializer {
     }
 
     fn read_sets<T: Iterator<Item = isize>>(
-        &self,
-        _atn: &mut ATN,
-        data: &mut T,
-        read_unicode: fn(&mut T) -> isize,
+        &self, _atn: &mut ATN, data: &mut T, read_unicode: fn(&mut T) -> isize,
     ) -> Vec<IntervalSet> {
         let nsets = data.next().unwrap();
         let mut sets = Vec::new();
@@ -268,10 +265,7 @@ impl ATNDeserializer {
     }
 
     fn read_edges(
-        &self,
-        atn: &mut ATN,
-        data: &mut dyn Iterator<Item = isize>,
-        sets: &Vec<IntervalSet>,
+        &self, atn: &mut ATN, data: &mut dyn Iterator<Item = isize>, sets: &Vec<IntervalSet>,
     ) {
         let nedges = data.next().unwrap();
 
@@ -450,15 +444,8 @@ impl ATNDeserializer {
     // fn check_condition(&self, _condition: bool, _message: String) { unimplemented!() }
 
     fn edge_factory(
-        &self,
-        _atn: &ATN,
-        type_index: isize,
-        _src: ATNStateRef,
-        target: ATNStateRef,
-        arg1: isize,
-        arg2: isize,
-        arg3: isize,
-        sets: &Vec<IntervalSet>,
+        &self, _atn: &ATN, type_index: isize, _src: ATNStateRef, target: ATNStateRef, arg1: isize,
+        arg2: isize, arg3: isize, sets: &Vec<IntervalSet>,
     ) -> Box<dyn Transition> {
         //        //        let target = atn.states.get
         //        let mut base = BaseTransition {
@@ -526,10 +513,7 @@ impl ATNDeserializer {
     }
 
     fn state_factory(
-        &self,
-        type_index: isize,
-        rule_index: isize,
-        state_number: usize,
+        &self, type_index: isize, rule_index: isize, state_number: usize,
     ) -> Box<dyn ATNState> {
         let mut state = BaseATNState::new_base_atnstate();
         state.state_number = state_number;

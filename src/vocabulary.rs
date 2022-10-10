@@ -34,9 +34,7 @@ fn collect_to_string<'b, T: Borrow<str> + 'b>(
 
 impl VocabularyImpl {
     pub fn new<'b, T: Borrow<str> + 'b, Iter: IntoIterator<Item = &'b Option<T>>>(
-        literal_names: Iter,
-        symbolic_names: Iter,
-        display_names: Option<Iter>,
+        literal_names: Iter, symbolic_names: Iter, display_names: Option<Iter>,
     ) -> VocabularyImpl {
         //        let display_names = display_names.unwrap_or(&[]);
         VocabularyImpl {

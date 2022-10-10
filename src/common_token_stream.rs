@@ -186,8 +186,7 @@ impl<'input, T: TokenSource<'input>> CommonTokenStream<'input, T> {
     //    fn adjust_seek_index(&self, i: isize) -> int { unimplemented!() }
 
     fn lb(
-        &mut self,
-        k: isize,
+        &mut self, k: isize,
     ) -> Option<&<<Self as TokenStream<'input>>::TF as TokenFactory<'input>>::Tok> {
         if k == 0 || (self.base.p - k) < 0 {
             return None;

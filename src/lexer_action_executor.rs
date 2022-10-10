@@ -34,8 +34,7 @@ impl LexerActionExecutor {
     }
 
     pub(crate) fn new_copy_append(
-        old: Option<&Self>,
-        lexer_action: LexerAction,
+        old: Option<&Self>, lexer_action: LexerAction,
     ) -> LexerActionExecutor {
         let mut new = old
             .cloned()

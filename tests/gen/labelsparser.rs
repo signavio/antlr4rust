@@ -47,7 +47,7 @@ pub const INT: isize = 8;
 pub const WS: isize = 9;
 pub const RULE_s: usize = 0;
 pub const RULE_e: usize = 1;
-pub const ruleNames: [&'static str; 2] = ["s", "e"];
+pub const ruleNames: [&str; 2] = ["s", "e"];
 
 pub const _LITERAL_NAMES: [Option<&'static str>; 7] = [
     None,
@@ -213,10 +213,8 @@ impl<'input, I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'i
 
     fn get_vocabulary(&self) -> &dyn Vocabulary { &**VOCABULARY }
     fn sempred(
-        _localctx: Option<&(dyn LabelsParserContext<'input> + 'input)>,
-        rule_index: isize,
-        pred_index: isize,
-        recog: &mut BaseParserType<'input, I>,
+        _localctx: Option<&(dyn LabelsParserContext<'input> + 'input)>, rule_index: isize,
+        pred_index: isize, recog: &mut BaseParserType<'input, I>,
     ) -> bool {
         match rule_index {
             1 => LabelsParser::<'input, I, _>::e_sempred(
@@ -234,8 +232,7 @@ where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
 {
     fn e_sempred(
-        _localctx: Option<&EContext<'input>>,
-        pred_index: isize,
+        _localctx: Option<&EContext<'input>>, pred_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) -> bool {
         match pred_index {
@@ -277,8 +274,7 @@ antlr_rust::type_id! {SContextExt<'a>}
 
 impl<'input> SContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<SContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -402,8 +398,7 @@ antlr_rust::type_id! {EContextExt<'a>}
 
 impl<'input> EContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<EContextAll<'input>> {
         Rc::new(EContextAll::Error(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -924,8 +919,7 @@ where
                                 "null"
                             }
                             .to_owned()
-                        }
-                        .to_owned();
+                        };
                         if let EContextAll::AnIntContext(ctx) =
                             cast_mut::<_, EContextAll>(&mut _localctx)
                         {
@@ -1012,8 +1006,7 @@ where
                                 "null"
                             }
                             .to_owned()
-                        }
-                        .to_owned();
+                        };
                         if let EContextAll::AnIDContext(ctx) =
                             cast_mut::<_, EContextAll>(&mut _localctx)
                         {
@@ -1354,7 +1347,7 @@ lazy_static! {
     };
 }
 
-const _serializedATN: &'static str =
+const _serializedATN: &str =
     "\x03\u{608b}\u{a72a}\u{8133}\u{b9ed}\u{417c}\u{3be7}\u{7786}\u{5964}\x03\
 	\x0b\x2a\x04\x02\x09\x02\x04\x03\x09\x03\x03\x02\x03\x02\x03\x03\x03\x03\
 	\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x03\x05\x03\

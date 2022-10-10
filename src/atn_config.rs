@@ -111,9 +111,7 @@ impl ATNConfig {
     }
 
     pub fn new(
-        state: ATNStateRef,
-        alt: isize,
-        context: Option<Arc<PredictionContext>>,
+        state: ATNStateRef, alt: isize, context: Option<Arc<PredictionContext>>,
     ) -> ATNConfig {
         ATNConfig {
             precedence_filter_suppressed: false,
@@ -127,9 +125,7 @@ impl ATNConfig {
     }
 
     pub fn new_with_semantic(
-        state: ATNStateRef,
-        alt: isize,
-        context: Option<Arc<PredictionContext>>,
+        state: ATNStateRef, alt: isize, context: Option<Arc<PredictionContext>>,
         semantic_context: Box<SemanticContext>,
     ) -> ATNConfig {
         let mut new = Self::new(state, alt, context);
@@ -138,9 +134,7 @@ impl ATNConfig {
     }
 
     pub fn new_lexer_atnconfig6(
-        _state: ATNStateRef,
-        _alt: isize,
-        _context: Arc<PredictionContext>,
+        _state: ATNStateRef, _alt: isize, _context: Arc<PredictionContext>,
     ) -> ATNConfig {
         let mut atnconfig = ATNConfig::new(_state, _alt, Some(_context));
         atnconfig.config_type = ATNConfigType::LexerATNConfig {
@@ -151,9 +145,7 @@ impl ATNConfig {
     }
 
     pub fn cloned_with_new_semantic(
-        &self,
-        target: &dyn ATNState,
-        ctx: Box<SemanticContext>,
+        &self, target: &dyn ATNState, ctx: Box<SemanticContext>,
     ) -> ATNConfig {
         let mut new = self.cloned(target);
         new.semantic_context = ctx;
@@ -175,9 +167,7 @@ impl ATNConfig {
     }
 
     pub fn cloned_with_new_ctx(
-        &self,
-        target: &dyn ATNState,
-        ctx: Option<Arc<PredictionContext>>,
+        &self, target: &dyn ATNState, ctx: Option<Arc<PredictionContext>>,
     ) -> ATNConfig {
         let mut new = self.cloned(target);
         new.context = ctx;
@@ -186,9 +176,7 @@ impl ATNConfig {
     }
 
     pub(crate) fn cloned_with_new_exec(
-        &self,
-        target: &dyn ATNState,
-        exec: Option<LexerActionExecutor>,
+        &self, target: &dyn ATNState, exec: Option<LexerActionExecutor>,
     ) -> ATNConfig {
         let mut new = self.cloned(target);
         if let ATNConfigType::LexerATNConfig {

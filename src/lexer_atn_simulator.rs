@@ -39,9 +39,7 @@ pub const ERROR_DFA_STATE_REF: DFAStateRef = usize::MAX;
 pub trait ILexerATNSimulator: IATNSimulator {
     fn reset(&mut self);
     fn match_token<'input>(
-        &mut self,
-        mode: usize,
-        lexer: &mut impl Lexer<'input>,
+        &mut self, mode: usize, lexer: &mut impl Lexer<'input>,
     ) -> Result<isize, ANTLRError>;
     fn get_char_position_in_line(&self) -> isize;
     fn set_char_position_in_line(&mut self, column: isize);
@@ -145,8 +143,7 @@ impl LexerATNSimulator {
     ///
     /// Called from generated parser.
     pub fn new_lexer_atnsimulator(
-        atn: Arc<ATN>,
-        decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
+        atn: Arc<ATN>, decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
         shared_context_cache: Arc<PredictionContextCache>,
     ) -> LexerATNSimulator {
         LexerATNSimulator {
@@ -172,9 +169,7 @@ impl LexerATNSimulator {
 
     #[cold]
     fn match_atn<'input>(
-        &mut self,
-        lexer: &mut impl Lexer<'input>,
-        dfa: RwLockUpgradableReadGuard<'_, DFA>,
+        &mut self, lexer: &mut impl Lexer<'input>, dfa: RwLockUpgradableReadGuard<'_, DFA>,
     ) -> Result<isize, ANTLRError> {
         //        let start_state = self.atn().mode_to_start_state.get(self.mode as usize).ok_or(ANTLRError::IllegalStateError("invalid mode".into()))?;
         let atn = self.atn();
@@ -263,10 +258,7 @@ impl LexerATNSimulator {
 
     #[cold]
     fn compute_target_state<'input>(
-        &self,
-        dfa: &mut Option<RwLockUpgradableReadGuard<'_, DFA>>,
-        s: DFAStateRef,
-        _t: isize,
+        &self, dfa: &mut Option<RwLockUpgradableReadGuard<'_, DFA>>, s: DFAStateRef, _t: isize,
         lexer: &mut impl Lexer<'input>,
     ) -> DFAStateRef {
         let mut reach = ATNConfigSet::new_ordered();
@@ -356,9 +348,7 @@ impl LexerATNSimulator {
     //    }
 
     fn fail_or_accept<'input>(
-        &mut self,
-        _t: isize,
-        lexer: &mut impl Lexer<'input>,
+        &mut self, _t: isize, lexer: &mut impl Lexer<'input>,
         dfa: RwLockUpgradableReadGuard<'_, DFA>,
     ) -> Result<isize, ANTLRError> {
         //        println!("fail_or_accept");
@@ -399,9 +389,7 @@ impl LexerATNSimulator {
     }
 
     fn compute_start_state<'input>(
-        &self,
-        _p: &dyn ATNState,
-        lexer: &mut impl Lexer<'input>,
+        &self, _p: &dyn ATNState, lexer: &mut impl Lexer<'input>,
     ) -> Box<ATNConfigSet> {
         //        let initial_context = &EMPTY_PREDICTION_CONTEXT;
         let mut config_set = ATNConfigSet::new_ordered();
@@ -614,10 +602,7 @@ impl LexerATNSimulator {
     }
 
     fn capture_sim_state(
-        &mut self,
-        dfa: &DFA,
-        input: &impl IntStream,
-        dfa_state: DFAStateRef,
+        &mut self, dfa: &DFA, input: &impl IntStream, dfa_state: DFAStateRef,
     ) -> bool {
         if dfa.states[dfa_state].is_accept_state {
             self.prev_accept = SimState {

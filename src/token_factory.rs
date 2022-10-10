@@ -56,15 +56,9 @@ pub trait TokenFactory<'a>: TidAble<'a> + Sized {
     /// Creates token either from `sourse` or from pure data in `text`
     /// Either `source` or `text` are not None
     fn create<T>(
-        &'a self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<<Self::Data as ToOwned>::Owned>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'a self, source: Option<&mut T>, ttype: isize,
+        text: Option<<Self::Data as ToOwned>::Owned>, channel: isize, start: isize, stop: isize,
+        line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<Self::From> + ?Sized;
@@ -94,15 +88,8 @@ impl<'a> TokenFactory<'a> for CommonTokenFactory {
 
     #[inline]
     fn create<T>(
-        &'a self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<String>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'a self, source: Option<&mut T>, ttype: isize, text: Option<String>, channel: isize,
+        start: isize, stop: isize, line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<Self::From> + ?Sized,
@@ -149,15 +136,8 @@ impl<'a> TokenFactory<'a> for OwningTokenFactory {
 
     #[inline]
     fn create<T>(
-        &'a self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<String>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'a self, source: Option<&mut T>, ttype: isize, text: Option<String>, channel: isize,
+        start: isize, stop: isize, line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<String> + ?Sized,
@@ -261,15 +241,9 @@ where
 
     #[inline]
     fn create<T>(
-        &'input self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<<Self::Data as ToOwned>::Owned>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'input self, source: Option<&mut T>, ttype: isize,
+        text: Option<<Self::Data as ToOwned>::Owned>, channel: isize, start: isize, stop: isize,
+        line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<Self::From> + ?Sized,

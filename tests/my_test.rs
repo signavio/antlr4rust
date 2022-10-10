@@ -1,6 +1,6 @@
 #![feature(try_blocks)]
 #![feature(inner_deref)]
-#![feature(specialization)]
+#![feature(min_specialization)]
 #![feature(coerce_unsized)]
 //! Integration tests
 

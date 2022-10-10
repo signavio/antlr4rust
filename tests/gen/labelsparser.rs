@@ -1033,7 +1033,7 @@ where
                 recog.base.set_state(36);
                 recog.err_handler.sync(&mut recog.base)?;
                 _alt = recog.interpreter.adaptive_predict(2, &mut recog.base)?;
-                while { _alt != 2 && _alt != INVALID_ALT } {
+                while _alt != 2 && _alt != INVALID_ALT {
                     if _alt == 1 {
                         recog.trigger_exit_rule_event();
                         _prevctx = _localctx.clone();

@@ -299,13 +299,13 @@ where
                 recog.base.set_state(5);
                 recog.err_handler.sync(&mut recog.base)?;
                 _alt = recog.interpreter.adaptive_predict(0, &mut recog.base)?;
-                while { _alt != 2 && _alt != INVALID_ALT } {
+                while _alt != 2 && _alt != INVALID_ALT {
                     if _alt == 1 {
                         {
                             {
                                 recog.base.set_state(2);
                                 _la = recog.base.input.la(1);
-                                if { !(_la == ID || _la == ATN) } {
+                                if !(_la == ID || _la == ATN) {
                                     recog.err_handler.recover_inline(&mut recog.base)?;
                                 } else {
                                     if recog.base.input.la(1) == TOKEN_EOF {

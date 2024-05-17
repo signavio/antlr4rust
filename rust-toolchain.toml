@@ -1,0 +1,12 @@
+# Only update when all components are available
+# for the required targets.
+#
+# Check these sites:
+# * https://rust-lang.github.io/rustup-components-history/x86_64-unknown-linux-gnu.html
+# * https://rust-lang.github.io/rustup-components-history/x86_64-apple-darwin.html
+# * https://rust-lang.github.io/rustup-components-history/aarch64-apple-darwin.html
+# * https://rust-lang.github.io/rustup-components-history/x86_64-pc-windows-msvc.html
+
+[toolchain]
+channel = "nightly-2024-03-11"
+components = ["rustfmt", "clippy"]

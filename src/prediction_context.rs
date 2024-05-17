@@ -137,9 +137,7 @@ impl Display for PredictionContext {
 //}
 
 impl Hash for PredictionContext {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        state.write_i32(self.hash_code())
-    }
+    fn hash<H: Hasher>(&self, state: &mut H) { state.write_i32(self.hash_code()) }
 }
 
 lazy_static! {
@@ -629,7 +627,5 @@ impl PredictionContextCache {
     }
 
     #[doc(hidden)]
-    pub fn length(&self) -> usize {
-        self.cache.read().unwrap().len()
-    }
+    pub fn length(&self) -> usize { self.cache.read().unwrap().len() }
 }

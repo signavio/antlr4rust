@@ -77,9 +77,7 @@ pub enum ANTLRError {
 // }
 
 impl Display for ANTLRError {
-    fn fmt(&self, _f: &mut Formatter<'_>) -> fmt::Result {
-        <Self as Debug>::fmt(self, _f)
-    }
+    fn fmt(&self, _f: &mut Formatter<'_>) -> fmt::Result { <Self as Debug>::fmt(self, _f) }
 }
 
 impl Error for ANTLRError {

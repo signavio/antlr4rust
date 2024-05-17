@@ -72,9 +72,7 @@ where
     }
 
     #[inline]
-    fn len(&self) -> usize {
-        self.len()
-    }
+    fn len(&self) -> usize { self.len() }
 
     #[inline]
     fn from_text(text: &str) -> Self::Owned {
@@ -145,19 +143,13 @@ impl InputData for str {
     }
 
     #[inline]
-    fn len(&self) -> usize {
-        self.len()
-    }
+    fn len(&self) -> usize { self.len() }
 
-    fn from_text(text: &str) -> Self::Owned {
-        text.to_owned()
-    }
+    fn from_text(text: &str) -> Self::Owned { text.to_owned() }
 
     // #[inline]
     // fn from_text(text: &str) -> Self::Owned { text.to_owned() }
 
     #[inline]
-    fn to_display(&self) -> String {
-        self.to_string()
-    }
+    fn to_display(&self) -> String { self.to_string() }
 }

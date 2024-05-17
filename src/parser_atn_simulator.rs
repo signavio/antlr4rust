@@ -100,12 +100,8 @@ struct Local<'a, 'input, T: Parser<'input>> {
 }
 
 impl<'a, 'input, T: Parser<'input> + 'a> Local<'a, 'input, T> {
-    fn dfa(&self) -> &DFA {
-        self.dfa.as_deref().unwrap()
-    }
-    fn dfa_mut(&mut self) -> &mut DFA {
-        self.dfa_mut.as_mut().unwrap().deref_mut()
-    }
+    fn dfa(&self) -> &DFA { self.dfa.as_deref().unwrap() }
+    fn dfa_mut(&mut self) -> &mut DFA { self.dfa_mut.as_mut().unwrap().deref_mut() }
     fn upgrade_lock(&mut self) {
         let lock = self.dfa.take().unwrap();
         self.dfa_mut = Some(RwLockUpgradableReadGuard::upgrade(lock));
@@ -147,14 +143,10 @@ impl ParserATNSimulator {
     }
 
     /// Returns current prediction mode
-    pub fn get_prediction_mode(&self) -> PredictionMode {
-        self.prediction_mode.get()
-    }
+    pub fn get_prediction_mode(&self) -> PredictionMode { self.prediction_mode.get() }
 
     /// Sets current prediction mode
-    pub fn set_prediction_mode(&self, v: PredictionMode) {
-        self.prediction_mode.set(v)
-    }
+    pub fn set_prediction_mode(&self, v: PredictionMode) { self.prediction_mode.set(v) }
 
     // fn reset(&self) { unimplemented!() }
 
@@ -1433,15 +1425,9 @@ impl ParserATNSimulator {
 }
 
 impl IATNSimulator for ParserATNSimulator {
-    fn shared_context_cache(&self) -> &PredictionContextCache {
-        self.base.shared_context_cache()
-    }
+    fn shared_context_cache(&self) -> &PredictionContextCache { self.base.shared_context_cache() }
 
-    fn atn(&self) -> &ATN {
-        self.base.atn()
-    }
+    fn atn(&self) -> &ATN { self.base.atn() }
 
-    fn decision_to_dfa(&self) -> &Vec<RwLock<DFA>> {
-        self.base.decision_to_dfa()
-    }
+    fn decision_to_dfa(&self) -> &Vec<RwLock<DFA>> { self.base.decision_to_dfa() }
 }

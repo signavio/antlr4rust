@@ -1,5 +1,7 @@
 #![feature(try_blocks)]
 #![feature(coerce_unsized)]
+#![allow(unused_braces)]
+
 //! Integration tests
 
 mod gen {

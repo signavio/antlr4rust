@@ -59,7 +59,7 @@ impl VocabularyImpl {
 
         for (i, tn) in token_names.iter().enumerate() {
             match tn {
-                Some(tn) if !tn.is_empty() && tn.chars().next().unwrap() == '\'' => {
+                Some(tn) if !tn.is_empty() && tn.starts_with('\'') => {
                     symbolic_names[i] = None;
                     continue;
                 }
@@ -85,9 +85,7 @@ impl VocabularyImpl {
 }
 
 impl Vocabulary for VocabularyImpl {
-    fn get_max_token_type(&self) -> isize {
-        self.max_token_type
-    }
+    fn get_max_token_type(&self) -> isize { self.max_token_type }
 
     fn get_literal_name(&self, token_type: isize) -> Option<&str> {
         self.literal_names
@@ -110,7 +108,7 @@ impl Vocabulary for VocabularyImpl {
             .and_then(|x| x.as_deref())
             .or_else(|| self.get_literal_name(token_type))
             .or_else(|| self.get_symbolic_name(token_type))
-            .map(|x| Borrowed(x))
+            .map(Borrowed)
             .unwrap_or(Owned(token_type.to_string()))
     }
 }
@@ -121,19 +119,11 @@ pub(crate) static DUMMY_VOCAB: DummyVocab = DummyVocab;
 pub(crate) struct DummyVocab;
 
 impl Vocabulary for DummyVocab {
-    fn get_max_token_type(&self) -> isize {
-        unimplemented!()
-    }
+    fn get_max_token_type(&self) -> isize { unimplemented!() }
 
-    fn get_literal_name(&self, _token_type: isize) -> Option<&str> {
-        unimplemented!()
-    }
+    fn get_literal_name(&self, _token_type: isize) -> Option<&str> { unimplemented!() }
 
-    fn get_symbolic_name(&self, _token_type: isize) -> Option<&str> {
-        unimplemented!()
-    }
+    fn get_symbolic_name(&self, _token_type: isize) -> Option<&str> { unimplemented!() }
 
-    fn get_display_name(&self, token_type: isize) -> Cow<'_, str> {
-        token_type.to_string().into()
-    }
+    fn get_display_name(&self, token_type: isize) -> Cow<'_, str> { token_type.to_string().into() }
 }

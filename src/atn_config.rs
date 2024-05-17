@@ -2,7 +2,7 @@ use std::fmt::{Debug, Error, Formatter};
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
 
-use murmur3::murmur3_32::MurmurHasher;
+use crate::hash::DefaultHasher;
 
 use crate::atn_config::ATNConfigType::LexerATNConfig;
 use crate::atn_state::{ATNState, ATNStateRef, ATNStateType};
@@ -104,7 +104,7 @@ impl ATNConfig {
     }
 
     pub fn default_hash(&self) -> u64 {
-        MurmurHasher::default().convert_with(|mut x| {
+        DefaultHasher::default().convert_with(|mut x| {
             self.hash(&mut x);
             x.finish()
         })

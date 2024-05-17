@@ -168,6 +168,7 @@ mod utils;
 //pub mod tokenstream_rewriter_test;
 mod atn_type;
 // mod context_factory;
+mod hash;
 pub mod rule_context;
 pub mod vocabulary;
 //#[cfg(test)]

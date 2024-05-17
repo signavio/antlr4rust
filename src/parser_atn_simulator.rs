@@ -26,13 +26,14 @@ use crate::lexer_atn_simulator::ERROR_DFA_STATE_REF;
 use crate::parser::{Parser, ParserNodeType};
 
 use crate::prediction_context::{
-    MurmurHasherBuilder, PredictionContext, PredictionContextCache, EMPTY_PREDICTION_CONTEXT,
+    PredictionContext, PredictionContextCache, EMPTY_PREDICTION_CONTEXT,
     PREDICTION_CONTEXT_EMPTY_RETURN_STATE,
 };
 use crate::prediction_mode::*;
 use crate::semantic_context::SemanticContext;
 use crate::token::{Token, TOKEN_EOF, TOKEN_EPSILON};
 
+use crate::hash::DefaultHasherBuilder;
 use crate::token_stream::TokenStream;
 use crate::transition::{
     ActionTransition, EpsilonTransition, PrecedencePredicateTransition, PredicateTransition,
@@ -125,7 +126,7 @@ impl<'a, 'input, T: Parser<'input> + 'a> Local<'a, 'input, T> {
 pub(crate) type MergeCache = HashMap<
     (Arc<PredictionContext>, Arc<PredictionContext>),
     Arc<PredictionContext>,
-    MurmurHasherBuilder,
+    DefaultHasherBuilder,
 >;
 
 impl ParserATNSimulator {
@@ -162,7 +163,7 @@ impl ParserATNSimulator {
         &self, decision: isize, parser: &mut T,
     ) -> Result<isize, ANTLRError> {
         self.start_index.set(parser.get_input_stream_mut().index());
-        let mut merge_cache: MergeCache = HashMap::with_hasher(MurmurHasherBuilder {});
+        let mut merge_cache: MergeCache = HashMap::with_hasher(DefaultHasherBuilder {});
         let mut local = Local {
             outer_context: parser.get_parser_rule_context().clone(),
             dfa: self.decision_to_dfa()[decision as usize]

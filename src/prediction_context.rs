@@ -1,12 +1,12 @@
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt::{Display, Error, Formatter};
-use std::hash::{BuildHasher, Hash, Hasher};
+use std::hash::{Hash, Hasher};
 use std::ops::Deref;
 
 use std::sync::{Arc, RwLock};
 
-use murmur3::murmur3_32::MurmurHasher;
+use crate::hash::{DefaultHasher, DefaultHasherBuilder};
 
 use crate::atn::ATN;
 use crate::dfa::ScopeExt;
@@ -180,7 +180,7 @@ impl PredictionContext {
     }
 
     pub fn calc_hash(&mut self) {
-        let mut hasher = MurmurHasher::default();
+        let mut hasher = DefaultHasher::default();
         match self {
             PredictionContext::Singleton(SingletonPredictionContext {
                 parent_ctx,
@@ -555,26 +555,14 @@ impl PredictionContext {
 #[derive(Debug)]
 pub struct PredictionContextCache {
     //todo test dashmap
-    cache: RwLock<HashMap<Arc<PredictionContext>, Arc<PredictionContext>, MurmurHasherBuilder>>,
-}
-
-#[doc(hidden)]
-#[derive(Debug)]
-pub struct MurmurHasherBuilder {}
-
-impl BuildHasher for MurmurHasherBuilder {
-    type Hasher = MurmurHasher;
-
-    fn build_hasher(&self) -> Self::Hasher {
-        MurmurHasher::default()
-    }
+    cache: RwLock<HashMap<Arc<PredictionContext>, Arc<PredictionContext>, DefaultHasherBuilder>>,
 }
 
 impl PredictionContextCache {
     #[doc(hidden)]
     pub fn new() -> PredictionContextCache {
         PredictionContextCache {
-            cache: RwLock::new(HashMap::with_hasher(MurmurHasherBuilder {})),
+            cache: RwLock::new(HashMap::with_hasher(DefaultHasherBuilder {})),
         }
     }
 

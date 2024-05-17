@@ -141,20 +141,32 @@ pub struct XMLLexer<'input, Input: CharStream<From<'input>>> {
 impl<'input, Input: CharStream<From<'input>>> Deref for XMLLexer<'input, Input> {
     type Target = BaseLexer<'input, XMLLexerActions, Input, LocalTokenFactory<'input>>;
 
-    fn deref(&self) -> &Self::Target { &self.base }
+    fn deref(&self) -> &Self::Target {
+        &self.base
+    }
 }
 
 impl<'input, Input: CharStream<From<'input>>> DerefMut for XMLLexer<'input, Input> {
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.base }
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.base
+    }
 }
 
 impl<'input, Input: CharStream<From<'input>>> XMLLexer<'input, Input> {
-    fn get_rule_names(&self) -> &'static [&'static str] { &ruleNames }
-    fn get_literal_names(&self) -> &[Option<&str>] { &_LITERAL_NAMES }
+    fn get_rule_names(&self) -> &'static [&'static str] {
+        &ruleNames
+    }
+    fn get_literal_names(&self) -> &[Option<&str>] {
+        &_LITERAL_NAMES
+    }
 
-    fn get_symbolic_names(&self) -> &[Option<&str>] { &_SYMBOLIC_NAMES }
+    fn get_symbolic_names(&self) -> &[Option<&str>] {
+        &_SYMBOLIC_NAMES
+    }
 
-    fn get_grammar_file_name(&self) -> &'static str { "XMLLexer.g4" }
+    fn get_grammar_file_name(&self) -> &'static str {
+        "XMLLexer.g4"
+    }
 
     pub fn new_with_token_factory(input: Input, tf: &'input LocalTokenFactory<'input>) -> Self {
         antlr_rust::recognizer::check_version("0", "2");
@@ -191,8 +203,7 @@ impl<'input, Input: CharStream<From<'input>>>
     for XMLLexerActions
 {
     fn action(
-        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>,
-        rule_index: isize,
+        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>, rule_index: isize,
         action_index: isize,
         recog: &mut BaseLexer<'input, XMLLexerActions, Input, LocalTokenFactory<'input>>,
     ) {
@@ -202,8 +213,7 @@ impl<'input, Input: CharStream<From<'input>>>
         }
     }
     fn sempred(
-        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>,
-        rule_index: isize,
+        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>, rule_index: isize,
         pred_index: isize,
         recog: &mut BaseLexer<'input, XMLLexerActions, Input, LocalTokenFactory<'input>>,
     ) -> bool {
@@ -216,8 +226,7 @@ impl<'input, Input: CharStream<From<'input>>>
 
 impl<'input, Input: CharStream<From<'input>>> XMLLexer<'input, Input> {
     fn CLOSE_action(
-        _localctx: Option<&LexerContext<'input>>,
-        action_index: isize,
+        _localctx: Option<&LexerContext<'input>>, action_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) {
         match action_index {
@@ -229,8 +238,7 @@ impl<'input, Input: CharStream<From<'input>>> XMLLexer<'input, Input> {
         }
     }
     fn COMMENT_sempred(
-        _localctx: Option<&LexerContext<'input>>,
-        pred_index: isize,
+        _localctx: Option<&LexerContext<'input>>, pred_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) -> bool {
         match pred_index {
@@ -252,17 +260,29 @@ impl<'input> TokenAware<'input> for XMLLexerActions {
 impl<'input, Input: CharStream<From<'input>>> TokenSource<'input> for XMLLexer<'input, Input> {
     type TF = LocalTokenFactory<'input>;
 
-    fn next_token(&mut self) -> <Self::TF as TokenFactory<'input>>::Tok { self.base.next_token() }
+    fn next_token(&mut self) -> <Self::TF as TokenFactory<'input>>::Tok {
+        self.base.next_token()
+    }
 
-    fn get_line(&self) -> isize { self.base.get_line() }
+    fn get_line(&self) -> isize {
+        self.base.get_line()
+    }
 
-    fn get_char_position_in_line(&self) -> isize { self.base.get_char_position_in_line() }
+    fn get_char_position_in_line(&self) -> isize {
+        self.base.get_char_position_in_line()
+    }
 
-    fn get_input_stream(&mut self) -> Option<&mut dyn IntStream> { self.base.get_input_stream() }
+    fn get_input_stream(&mut self) -> Option<&mut dyn IntStream> {
+        self.base.get_input_stream()
+    }
 
-    fn get_source_name(&self) -> String { self.base.get_source_name() }
+    fn get_source_name(&self) -> String {
+        self.base.get_source_name()
+    }
 
-    fn get_token_factory(&self) -> &'input Self::TF { self.base.get_token_factory() }
+    fn get_token_factory(&self) -> &'input Self::TF {
+        self.base.get_token_factory()
+    }
 }
 
 lazy_static! {

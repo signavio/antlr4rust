@@ -98,9 +98,13 @@ where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
     H: ErrorStrategy<'input, BaseParserType<'input, I>>,
 {
-    pub fn get_serialized_atn() -> &'static str { _serializedATN }
+    pub fn get_serialized_atn() -> &'static str {
+        _serializedATN
+    }
 
-    pub fn set_error_strategy(&mut self, strategy: H) { self.err_handler = strategy }
+    pub fn set_error_strategy(&mut self, strategy: H) {
+        self.err_handler = strategy
+    }
 
     pub fn with_strategy(input: I, strategy: H) -> Self {
         antlr_rust::recognizer::check_version("0", "2");
@@ -133,7 +137,9 @@ impl<'input, I> CSVParser<'input, I, DefaultErrorStrategy<'input, CSVParserConte
 where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
 {
-    pub fn new(input: I) -> Self { Self::with_strategy(input, DefaultErrorStrategy::new()) }
+    pub fn new(input: I) -> Self {
+        Self::with_strategy(input, DefaultErrorStrategy::new())
+    }
 }
 
 /// Trait for monomorphized trait object that corresponds to the nodes of parse tree generated for CSVParser
@@ -177,7 +183,9 @@ where
 {
     type Target = BaseParserType<'input, I>;
 
-    fn deref(&self) -> &Self::Target { &self.base }
+    fn deref(&self) -> &Self::Target {
+        &self.base
+    }
 }
 
 impl<'input, I, H> DerefMut for CSVParser<'input, I, H>
@@ -185,7 +193,9 @@ where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
     H: ErrorStrategy<'input, BaseParserType<'input, I>>,
 {
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.base }
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.base
+    }
 }
 
 pub struct CSVParserExt {}
@@ -204,11 +214,17 @@ impl<'input, I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'i
 impl<'input, I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>>
     Actions<'input, BaseParserType<'input, I>> for CSVParserExt
 {
-    fn get_grammar_file_name(&self) -> &str { "CSV.g4" }
+    fn get_grammar_file_name(&self) -> &str {
+        "CSV.g4"
+    }
 
-    fn get_rule_names(&self) -> &[&str] { &ruleNames }
+    fn get_rule_names(&self) -> &[&str] {
+        &ruleNames
+    }
 
-    fn get_vocabulary(&self) -> &dyn Vocabulary { &**VOCABULARY }
+    fn get_vocabulary(&self) -> &dyn Vocabulary {
+        &**VOCABULARY
+    }
 }
 //------------------- csvFile ----------------
 pub type CsvFileContextAll<'input> = CsvFileContext<'input>;
@@ -234,21 +250,24 @@ impl<'input, 'a> Listenable<dyn CSVListener<'input> + 'a> for CsvFileContext<'in
 }
 
 impl<'input, 'a> Visitable<dyn CSVVisitor<'input> + 'a> for CsvFileContext<'input> {
-    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) { visitor.visit_csvFile(self); }
+    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) {
+        visitor.visit_csvFile(self);
+    }
 }
 
 impl<'input> CustomRuleContext<'input> for CsvFileContextExt<'input> {
     type TF = LocalTokenFactory<'input>;
     type Ctx = CSVParserContextType;
-    fn get_rule_index(&self) -> usize { RULE_csvFile }
+    fn get_rule_index(&self) -> usize {
+        RULE_csvFile
+    }
     //fn type_rule_index() -> usize where Self: Sized { RULE_csvFile }
 }
 antlr_rust::type_id! {CsvFileContextExt<'a>}
 
 impl<'input> CsvFileContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<CsvFileContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -369,21 +388,24 @@ impl<'input, 'a> Listenable<dyn CSVListener<'input> + 'a> for HdrContext<'input>
 }
 
 impl<'input, 'a> Visitable<dyn CSVVisitor<'input> + 'a> for HdrContext<'input> {
-    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) { visitor.visit_hdr(self); }
+    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) {
+        visitor.visit_hdr(self);
+    }
 }
 
 impl<'input> CustomRuleContext<'input> for HdrContextExt<'input> {
     type TF = LocalTokenFactory<'input>;
     type Ctx = CSVParserContextType;
-    fn get_rule_index(&self) -> usize { RULE_hdr }
+    fn get_rule_index(&self) -> usize {
+        RULE_hdr
+    }
     //fn type_rule_index() -> usize where Self: Sized { RULE_hdr }
 }
 antlr_rust::type_id! {HdrContextExt<'a>}
 
 impl<'input> HdrContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<HdrContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -464,21 +486,24 @@ impl<'input, 'a> Listenable<dyn CSVListener<'input> + 'a> for RowContext<'input>
 }
 
 impl<'input, 'a> Visitable<dyn CSVVisitor<'input> + 'a> for RowContext<'input> {
-    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) { visitor.visit_row(self); }
+    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) {
+        visitor.visit_row(self);
+    }
 }
 
 impl<'input> CustomRuleContext<'input> for RowContextExt<'input> {
     type TF = LocalTokenFactory<'input>;
     type Ctx = CSVParserContextType;
-    fn get_rule_index(&self) -> usize { RULE_row }
+    fn get_rule_index(&self) -> usize {
+        RULE_row
+    }
     //fn type_rule_index() -> usize where Self: Sized { RULE_row }
 }
 antlr_rust::type_id! {RowContextExt<'a>}
 
 impl<'input> RowContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<RowContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -597,21 +622,24 @@ impl<'input, 'a> Listenable<dyn CSVListener<'input> + 'a> for FieldContext<'inpu
 }
 
 impl<'input, 'a> Visitable<dyn CSVVisitor<'input> + 'a> for FieldContext<'input> {
-    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) { visitor.visit_field(self); }
+    fn accept(&self, visitor: &mut (dyn CSVVisitor<'input> + 'a)) {
+        visitor.visit_field(self);
+    }
 }
 
 impl<'input> CustomRuleContext<'input> for FieldContextExt<'input> {
     type TF = LocalTokenFactory<'input>;
     type Ctx = CSVParserContextType;
-    fn get_rule_index(&self) -> usize { RULE_field }
+    fn get_rule_index(&self) -> usize {
+        RULE_field
+    }
     //fn type_rule_index() -> usize where Self: Sized { RULE_field }
 }
 antlr_rust::type_id! {FieldContextExt<'a>}
 
 impl<'input> FieldContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<FieldContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,

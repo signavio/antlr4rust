@@ -27,8 +27,7 @@ impl Debug for BaseATNSimulator {
 
 impl BaseATNSimulator {
     pub fn new_base_atnsimulator(
-        atn: Arc<ATN>,
-        decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
+        atn: Arc<ATN>, decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
         shared_context_cache: Arc<PredictionContextCache>,
     ) -> BaseATNSimulator {
         BaseATNSimulator {
@@ -40,9 +39,15 @@ impl BaseATNSimulator {
 }
 
 impl IATNSimulator for BaseATNSimulator {
-    fn shared_context_cache(&self) -> &PredictionContextCache { self.shared_context_cache.deref() }
+    fn shared_context_cache(&self) -> &PredictionContextCache {
+        self.shared_context_cache.deref()
+    }
 
-    fn atn(&self) -> &ATN { self.atn.as_ref() }
+    fn atn(&self) -> &ATN {
+        self.atn.as_ref()
+    }
 
-    fn decision_to_dfa(&self) -> &Vec<RwLock<DFA>> { self.decision_to_dfa.as_ref() }
+    fn decision_to_dfa(&self) -> &Vec<RwLock<DFA>> {
+        self.decision_to_dfa.as_ref()
+    }
 }

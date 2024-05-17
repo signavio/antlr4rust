@@ -56,15 +56,9 @@ pub trait TokenFactory<'a>: TidAble<'a> + Sized {
     /// Creates token either from `sourse` or from pure data in `text`
     /// Either `source` or `text` are not None
     fn create<T>(
-        &'a self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<<Self::Data as ToOwned>::Owned>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'a self, source: Option<&mut T>, ttype: isize,
+        text: Option<<Self::Data as ToOwned>::Owned>, channel: isize, start: isize, stop: isize,
+        line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<Self::From> + ?Sized;
@@ -83,7 +77,9 @@ pub trait TokenFactory<'a>: TidAble<'a> + Sized {
 pub struct CommonTokenFactory;
 
 impl Default for &'_ CommonTokenFactory {
-    fn default() -> Self { &**COMMON_TOKEN_FACTORY_DEFAULT }
+    fn default() -> Self {
+        &**COMMON_TOKEN_FACTORY_DEFAULT
+    }
 }
 
 impl<'a> TokenFactory<'a> for CommonTokenFactory {
@@ -94,15 +90,8 @@ impl<'a> TokenFactory<'a> for CommonTokenFactory {
 
     #[inline]
     fn create<T>(
-        &'a self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<String>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'a self, source: Option<&mut T>, ttype: isize, text: Option<String>, channel: isize,
+        start: isize, stop: isize, line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<Self::From> + ?Sized,
@@ -131,9 +120,13 @@ impl<'a> TokenFactory<'a> for CommonTokenFactory {
         })
     }
 
-    fn create_invalid() -> Self::Tok { INVALID_COMMON.clone() }
+    fn create_invalid() -> Self::Tok {
+        INVALID_COMMON.clone()
+    }
 
-    fn get_data(from: Self::From) -> Cow<'a, Self::Data> { from }
+    fn get_data(from: Self::From) -> Cow<'a, Self::Data> {
+        from
+    }
 }
 
 /// Token factory that produces heap allocated
@@ -149,15 +142,8 @@ impl<'a> TokenFactory<'a> for OwningTokenFactory {
 
     #[inline]
     fn create<T>(
-        &'a self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<String>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'a self, source: Option<&mut T>, ttype: isize, text: Option<String>, channel: isize,
+        start: isize, stop: isize, line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<String> + ?Sized,
@@ -186,9 +172,13 @@ impl<'a> TokenFactory<'a> for OwningTokenFactory {
         })
     }
 
-    fn create_invalid() -> Self::Tok { INVALID_OWNING.clone() }
+    fn create_invalid() -> Self::Tok {
+        INVALID_OWNING.clone()
+    }
 
-    fn get_data(from: Self::From) -> Cow<'a, Self::Data> { from.into() }
+    fn get_data(from: Self::From) -> Cow<'a, Self::Data> {
+        from.into()
+    }
 }
 
 // pub struct DynFactory<'input,TF:TokenFactory<'.into()input>>(TF) where TF::Tok:CoerceUnsized<Box<dyn Token+'input>>;
@@ -261,15 +251,9 @@ where
 
     #[inline]
     fn create<T>(
-        &'input self,
-        source: Option<&mut T>,
-        ttype: isize,
-        text: Option<<Self::Data as ToOwned>::Owned>,
-        channel: isize,
-        start: isize,
-        stop: isize,
-        line: isize,
-        column: isize,
+        &'input self, source: Option<&mut T>, ttype: isize,
+        text: Option<<Self::Data as ToOwned>::Owned>, channel: isize, start: isize, stop: isize,
+        line: isize, column: isize,
     ) -> Self::Tok
     where
         T: CharStream<Self::From> + ?Sized,
@@ -281,9 +265,13 @@ where
         self.arena.alloc(*token)
     }
 
-    fn create_invalid() -> &'input Tok { <&Tok as Default>::default() }
+    fn create_invalid() -> &'input Tok {
+        <&Tok as Default>::default()
+    }
 
-    fn get_data(from: Self::From) -> Cow<'input, Self::Data> { TF::get_data(from) }
+    fn get_data(from: Self::From) -> Cow<'input, Self::Data> {
+        TF::get_data(from)
+    }
 }
 
 #[doc(hidden)]

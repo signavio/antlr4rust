@@ -14,7 +14,9 @@ pub(crate) struct LexerActionExecutor {
 }
 
 impl Hash for LexerActionExecutor {
-    fn hash<H: Hasher>(&self, state: &mut H) { state.write_u64(self.cached_hash) }
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        state.write_u64(self.cached_hash)
+    }
 }
 
 impl LexerActionExecutor {
@@ -34,8 +36,7 @@ impl LexerActionExecutor {
     }
 
     pub(crate) fn new_copy_append(
-        old: Option<&Self>,
-        lexer_action: LexerAction,
+        old: Option<&Self>, lexer_action: LexerAction,
     ) -> LexerActionExecutor {
         let mut new = old
             .cloned()

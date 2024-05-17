@@ -111,9 +111,7 @@ impl ATNConfig {
     }
 
     pub fn new(
-        state: ATNStateRef,
-        alt: isize,
-        context: Option<Arc<PredictionContext>>,
+        state: ATNStateRef, alt: isize, context: Option<Arc<PredictionContext>>,
     ) -> ATNConfig {
         ATNConfig {
             precedence_filter_suppressed: false,
@@ -127,9 +125,7 @@ impl ATNConfig {
     }
 
     pub fn new_with_semantic(
-        state: ATNStateRef,
-        alt: isize,
-        context: Option<Arc<PredictionContext>>,
+        state: ATNStateRef, alt: isize, context: Option<Arc<PredictionContext>>,
         semantic_context: Box<SemanticContext>,
     ) -> ATNConfig {
         let mut new = Self::new(state, alt, context);
@@ -138,9 +134,7 @@ impl ATNConfig {
     }
 
     pub fn new_lexer_atnconfig6(
-        _state: ATNStateRef,
-        _alt: isize,
-        _context: Arc<PredictionContext>,
+        _state: ATNStateRef, _alt: isize, _context: Arc<PredictionContext>,
     ) -> ATNConfig {
         let mut atnconfig = ATNConfig::new(_state, _alt, Some(_context));
         atnconfig.config_type = ATNConfigType::LexerATNConfig {
@@ -151,9 +145,7 @@ impl ATNConfig {
     }
 
     pub fn cloned_with_new_semantic(
-        &self,
-        target: &dyn ATNState,
-        ctx: Box<SemanticContext>,
+        &self, target: &dyn ATNState, ctx: Box<SemanticContext>,
     ) -> ATNConfig {
         let mut new = self.cloned(target);
         new.semantic_context = ctx;
@@ -175,9 +167,7 @@ impl ATNConfig {
     }
 
     pub fn cloned_with_new_ctx(
-        &self,
-        target: &dyn ATNState,
-        ctx: Option<Arc<PredictionContext>>,
+        &self, target: &dyn ATNState, ctx: Option<Arc<PredictionContext>>,
     ) -> ATNConfig {
         let mut new = self.cloned(target);
         new.context = ctx;
@@ -186,9 +176,7 @@ impl ATNConfig {
     }
 
     pub(crate) fn cloned_with_new_exec(
-        &self,
-        target: &dyn ATNState,
-        exec: Option<LexerActionExecutor>,
+        &self, target: &dyn ATNState, exec: Option<LexerActionExecutor>,
     ) -> ATNConfig {
         let mut new = self.cloned(target);
         if let ATNConfigType::LexerATNConfig {
@@ -202,25 +190,41 @@ impl ATNConfig {
         new
     }
 
-    pub fn get_state(&self) -> ATNStateRef { self.state }
+    pub fn get_state(&self) -> ATNStateRef {
+        self.state
+    }
 
-    pub fn get_alt(&self) -> isize { self.alt }
+    pub fn get_alt(&self) -> isize {
+        self.alt
+    }
 
-    pub(crate) fn get_type(&self) -> &ATNConfigType { &self.config_type }
+    pub(crate) fn get_type(&self) -> &ATNConfigType {
+        &self.config_type
+    }
 
-    pub fn get_context(&self) -> Option<&Arc<PredictionContext>> { self.context.as_ref() }
+    pub fn get_context(&self) -> Option<&Arc<PredictionContext>> {
+        self.context.as_ref()
+    }
 
-    pub fn take_context(&mut self) -> Arc<PredictionContext> { self.context.take().unwrap() }
+    pub fn take_context(&mut self) -> Arc<PredictionContext> {
+        self.context.take().unwrap()
+    }
 
-    pub fn set_context(&mut self, _v: Arc<PredictionContext>) { self.context = Some(_v); }
+    pub fn set_context(&mut self, _v: Arc<PredictionContext>) {
+        self.context = Some(_v);
+    }
 
-    pub fn get_reaches_into_outer_context(&self) -> isize { self.reaches_into_outer_context }
+    pub fn get_reaches_into_outer_context(&self) -> isize {
+        self.reaches_into_outer_context
+    }
 
     pub fn set_reaches_into_outer_context(&mut self, _v: isize) {
         self.reaches_into_outer_context = _v
     }
 
-    pub fn is_precedence_filter_suppressed(&self) -> bool { self.precedence_filter_suppressed }
+    pub fn is_precedence_filter_suppressed(&self) -> bool {
+        self.precedence_filter_suppressed
+    }
 
     pub fn set_precedence_filter_suppressed(&mut self, _v: bool) {
         self.precedence_filter_suppressed = _v;

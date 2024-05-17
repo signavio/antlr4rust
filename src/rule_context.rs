@@ -18,17 +18,23 @@ use std::any::type_name;
 /// Minimal rule context functionality required for parser to work properly
 pub trait RuleContext<'input>: CustomRuleContext<'input> {
     /// Internal parser state
-    fn get_invoking_state(&self) -> isize { -1 }
+    fn get_invoking_state(&self) -> isize {
+        -1
+    }
 
     /// Sets internal parser state
     fn set_invoking_state(&self, _t: isize) {}
 
     /// A context is empty if there is no invoking state; meaning nobody called
     /// current context. Which is usually true for the root of the syntax tree
-    fn is_empty(&self) -> bool { self.get_invoking_state() == -1 }
+    fn is_empty(&self) -> bool {
+        self.get_invoking_state() == -1
+    }
 
     /// Get parent context
-    fn get_parent_ctx(&self) -> Option<Rc<<Self::Ctx as ParserNodeType<'input>>::Type>> { None }
+    fn get_parent_ctx(&self) -> Option<Rc<<Self::Ctx as ParserNodeType<'input>>::Type>> {
+        None
+    }
 
     /// Set parent context
     fn set_parent(&self, _parent: &Option<Rc<<Self::Ctx as ParserNodeType<'input>>::Type>>) {}
@@ -69,7 +75,9 @@ impl<'a, TF: TokenFactory<'a> + 'a> CustomRuleContext<'a> for EmptyCustomRuleCon
     type TF = TF;
     type Ctx = EmptyContextType<'a, TF>;
 
-    fn get_rule_index(&self) -> usize { usize::max_value() }
+    fn get_rule_index(&self) -> usize {
+        usize::max_value()
+    }
 }
 
 // unsafe impl<'a, TF: TokenFactory<'a> + 'a> Tid for EmptyCustomRuleContext<'a, TF> {
@@ -108,7 +116,9 @@ pub trait CustomRuleContext<'input> {
     /// Rule index that corresponds to this context type
     fn get_rule_index(&self) -> usize;
 
-    fn get_alt_number(&self) -> isize { INVALID_ALT }
+    fn get_alt_number(&self) -> isize {
+        INVALID_ALT
+    }
     fn set_alt_number(&self, _alt_number: isize) {}
     // fn enter(_ctx: &dyn Tree<'input, Node=Self>, _listener: &mut dyn Any) where Self: Sized {}
     // fn exit(_ctx: &dyn Tree<'input, Node=Self>, _listener: &mut dyn Any) where Self: Sized {}
@@ -126,8 +136,7 @@ pub struct BaseRuleContext<'input, ExtCtx: CustomRuleContext<'input>> {
 impl<'input, ExtCtx: CustomRuleContext<'input>> BaseRuleContext<'input, ExtCtx> {
     pub fn new_parser_ctx(
         parent_ctx: Option<Rc<<ExtCtx::Ctx as ParserNodeType<'input>>::Type>>,
-        invoking_state: isize,
-        ext: ExtCtx,
+        invoking_state: isize, ext: ExtCtx,
     ) -> Self {
         Self {
             parent_ctx: RefCell::new(parent_ctx.as_ref().map(Rc::downgrade)),
@@ -137,19 +146,22 @@ impl<'input, ExtCtx: CustomRuleContext<'input>> BaseRuleContext<'input, ExtCtx> 
     }
 
     pub fn copy_from<T: ParserRuleContext<'input, TF = ExtCtx::TF, Ctx = ExtCtx::Ctx> + ?Sized>(
-        ctx: &T,
-        ext: ExtCtx,
+        ctx: &T, ext: ExtCtx,
     ) -> Self {
         Self::new_parser_ctx(ctx.get_parent_ctx(), ctx.get_invoking_state(), ext)
     }
 }
 
 impl<'input, Ctx: CustomRuleContext<'input>> Borrow<Ctx> for BaseRuleContext<'input, Ctx> {
-    fn borrow(&self) -> &Ctx { &self.ext }
+    fn borrow(&self) -> &Ctx {
+        &self.ext
+    }
 }
 
 impl<'input, Ctx: CustomRuleContext<'input>> BorrowMut<Ctx> for BaseRuleContext<'input, Ctx> {
-    fn borrow_mut(&mut self) -> &mut Ctx { &mut self.ext }
+    fn borrow_mut(&mut self) -> &mut Ctx {
+        &mut self.ext
+    }
 }
 
 impl<'input, ExtCtx: CustomRuleContext<'input>> CustomRuleContext<'input>
@@ -158,7 +170,9 @@ impl<'input, ExtCtx: CustomRuleContext<'input>> CustomRuleContext<'input>
     type TF = ExtCtx::TF;
     type Ctx = ExtCtx::Ctx;
 
-    fn get_rule_index(&self) -> usize { self.ext.get_rule_index() }
+    fn get_rule_index(&self) -> usize {
+        self.ext.get_rule_index()
+    }
 }
 
 // unsafe impl<'input, Ctx: CustomRuleContext<'input>> Tid for BaseRuleContext<'input, Ctx> {
@@ -175,9 +189,13 @@ impl<'input, ExtCtx: CustomRuleContext<'input>> CustomRuleContext<'input>
 impl<'input, ExtCtx: CustomRuleContext<'input>> RuleContext<'input>
     for BaseRuleContext<'input, ExtCtx>
 {
-    fn get_invoking_state(&self) -> isize { self.invoking_state.get() }
+    fn get_invoking_state(&self) -> isize {
+        self.invoking_state.get()
+    }
 
-    fn set_invoking_state(&self, t: isize) { self.invoking_state.set(t) }
+    fn set_invoking_state(&self, t: isize) {
+        self.invoking_state.set(t)
+    }
 
     fn get_parent_ctx(&self) -> Option<Rc<<ExtCtx::Ctx as ParserNodeType<'input>>::Type>> {
         self.parent_ctx

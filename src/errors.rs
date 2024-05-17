@@ -77,7 +77,9 @@ pub enum ANTLRError {
 // }
 
 impl Display for ANTLRError {
-    fn fmt(&self, _f: &mut Formatter<'_>) -> fmt::Result { <Self as Debug>::fmt(self, _f) }
+    fn fmt(&self, _f: &mut Formatter<'_>) -> fmt::Result {
+        <Self as Debug>::fmt(self, _f)
+    }
 }
 
 impl Error for ANTLRError {
@@ -167,9 +169,7 @@ impl NoViableAltError {
         }
     }
     pub fn new_full<'a, T: Parser<'a>>(
-        recog: &mut T,
-        start_token: OwningToken,
-        offending_token: OwningToken,
+        recog: &mut T, start_token: OwningToken, offending_token: OwningToken,
     ) -> NoViableAltError {
         Self {
             base: BaseRecognitionError {
@@ -200,9 +200,7 @@ impl InputMisMatchError {
     }
 
     pub fn with_state<'a, T: Parser<'a>>(
-        recognizer: &mut T,
-        offending_state: isize,
-        ctx: Rc<<T::Node as ParserNodeType<'a>>::Type>,
+        recognizer: &mut T, offending_state: isize, ctx: Rc<<T::Node as ParserNodeType<'a>>::Type>,
     ) -> InputMisMatchError {
         let mut a = Self::new(recognizer);
         // a.base.ctx = ctx;
@@ -227,9 +225,7 @@ pub struct FailedPredicateError {
 #[allow(missing_docs)]
 impl FailedPredicateError {
     pub fn new<'a, T: Parser<'a>>(
-        recog: &mut T,
-        predicate: Option<String>,
-        msg: Option<String>,
+        recog: &mut T, predicate: Option<String>, msg: Option<String>,
     ) -> ANTLRError {
         let tr = recog.get_interpreter().atn().states[recog.get_state() as usize]
             .get_transitions()

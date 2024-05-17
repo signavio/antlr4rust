@@ -34,21 +34,31 @@ impl<'input, T: TokenSource<'input>> IntStream for CommonTokenStream<'input, T> 
     }
 
     #[inline(always)]
-    fn mark(&mut self) -> isize { 0 }
+    fn mark(&mut self) -> isize {
+        0
+    }
 
     #[inline(always)]
     fn release(&mut self, _marker: isize) {}
 
     #[inline(always)]
-    fn index(&self) -> isize { self.base.index() }
+    fn index(&self) -> isize {
+        self.base.index()
+    }
 
     #[inline(always)]
-    fn seek(&mut self, index: isize) { self.base.seek(index); }
+    fn seek(&mut self, index: isize) {
+        self.base.seek(index);
+    }
 
     #[inline(always)]
-    fn size(&self) -> isize { self.base.size() }
+    fn size(&self) -> isize {
+        self.base.size()
+    }
 
-    fn get_source_name(&self) -> String { self.base.get_source_name() }
+    fn get_source_name(&self) -> String {
+        self.base.get_source_name()
+    }
 }
 
 impl<'input, T: TokenSource<'input>> TokenStream<'input> for CommonTokenStream<'input, T> {
@@ -69,7 +79,9 @@ impl<'input, T: TokenSource<'input>> TokenStream<'input> for CommonTokenStream<'
     }
 
     #[inline]
-    fn get(&self, index: isize) -> &<Self::TF as TokenFactory<'input>>::Tok { self.base.get(index) }
+    fn get(&self, index: isize) -> &<Self::TF as TokenFactory<'input>>::Tok {
+        self.base.get(index)
+    }
 
     fn get_token_source(&self) -> &dyn TokenSource<'input, TF = Self::TF> {
         self.base.get_token_source()
@@ -118,7 +130,9 @@ impl<'input, T: TokenSource<'input>> CommonTokenStream<'input, T> {
     }
 
     /// Creates iterator over this token stream
-    pub fn iter(&mut self) -> IterWrapper<'_, Self> { IterWrapper(self) }
+    pub fn iter(&mut self) -> IterWrapper<'_, Self> {
+        IterWrapper(self)
+    }
 
     fn sync(&mut self, i: isize) -> bool {
         let need = i - self.size() + 1;
@@ -186,8 +200,7 @@ impl<'input, T: TokenSource<'input>> CommonTokenStream<'input, T> {
     //    fn adjust_seek_index(&self, i: isize) -> int { unimplemented!() }
 
     fn lb(
-        &mut self,
-        k: isize,
+        &mut self, k: isize,
     ) -> Option<&<<Self as TokenStream<'input>>::TF as TokenFactory<'input>>::Tok> {
         if k == 0 || (self.base.p - k) < 0 {
             return None;

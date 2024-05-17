@@ -1,15 +1,9 @@
 #![feature(try_blocks)]
-#![feature(inner_deref)]
-#![feature(specialization)]
 #![feature(coerce_unsized)]
 //! Integration tests
 
-// #[macro_use]
-// extern crate lazy_static;
-
 mod gen {
     use std::fmt::Write;
-    use std::io::Read;
     use std::iter::FromIterator;
 
     use antlr_rust::common_token_stream::CommonTokenStream;
@@ -20,8 +14,7 @@ mod gen {
     use antlr_rust::token_factory::{ArenaCommonFactory, OwningTokenFactory};
     use antlr_rust::token_stream::{TokenStream, UnbufferedTokenStream};
     use antlr_rust::tree::{
-        ParseTree, ParseTreeListener, ParseTreeVisitor, ParseTreeWalker, TerminalNode, Tree,
-        VisitChildren, Visitable,
+        ParseTree, ParseTreeListener, ParseTreeVisitor, TerminalNode, Visitable,
     };
     use antlr_rust::InputStream;
     use csvlexer::*;

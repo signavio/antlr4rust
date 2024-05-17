@@ -246,9 +246,13 @@ impl<'input, Ctx: CustomRuleContext<'input>> Debug for BaseParserRuleContext<'in
 impl<'input, Ctx: CustomRuleContext<'input>> RuleContext<'input>
     for BaseParserRuleContext<'input, Ctx>
 {
-    fn get_invoking_state(&self) -> isize { self.base.get_invoking_state() }
+    fn get_invoking_state(&self) -> isize {
+        self.base.get_invoking_state()
+    }
 
-    fn set_invoking_state(&self, t: isize) { self.base.set_invoking_state(t) }
+    fn set_invoking_state(&self, t: isize) {
+        self.base.set_invoking_state(t)
+    }
 
     fn get_parent_ctx(&self) -> Option<Rc<<Ctx::Ctx as ParserNodeType<'input>>::Type>> {
         self.base.get_parent_ctx()
@@ -265,7 +269,9 @@ impl<'input, Ctx: CustomRuleContext<'input>> CustomRuleContext<'input>
     type TF = Ctx::TF;
     type Ctx = Ctx::Ctx;
 
-    fn get_rule_index(&self) -> usize { self.base.ext.get_rule_index() }
+    fn get_rule_index(&self) -> usize {
+        self.base.ext.get_rule_index()
+    }
 }
 
 // unsafe impl<'input, Ctx: CustomRuleContext<'input>> Tid for BaseParserRuleContext<'input, Ctx> {
@@ -282,19 +288,27 @@ impl<'input, Ctx: CustomRuleContext<'input>> CustomRuleContext<'input>
 impl<'input, Ctx: CustomRuleContext<'input>> Deref for BaseParserRuleContext<'input, Ctx> {
     type Target = Ctx;
 
-    fn deref(&self) -> &Self::Target { &self.base.ext }
+    fn deref(&self) -> &Self::Target {
+        &self.base.ext
+    }
 }
 
 impl<'input, Ctx: CustomRuleContext<'input>> DerefMut for BaseParserRuleContext<'input, Ctx> {
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.base.ext }
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.base.ext
+    }
 }
 
 impl<'input, Ctx: CustomRuleContext<'input>> Borrow<Ctx> for BaseParserRuleContext<'input, Ctx> {
-    fn borrow(&self) -> &Ctx { &self.base.ext }
+    fn borrow(&self) -> &Ctx {
+        &self.base.ext
+    }
 }
 
 impl<'input, Ctx: CustomRuleContext<'input>> BorrowMut<Ctx> for BaseParserRuleContext<'input, Ctx> {
-    fn borrow_mut(&mut self) -> &mut Ctx { &mut self.base.ext }
+    fn borrow_mut(&mut self) -> &mut Ctx {
+        &mut self.base.ext
+    }
 }
 
 impl<'input, Ctx: CustomRuleContext<'input> + TidAble<'input>> ParserRuleContext<'input>
@@ -358,7 +372,9 @@ impl<'input, Ctx: CustomRuleContext<'input> + TidAble<'input>> ParserRuleContext
         self.children.borrow_mut().push(child);
     }
 
-    fn remove_last_child(&self) { self.children.borrow_mut().pop(); }
+    fn remove_last_child(&self) {
+        self.children.borrow_mut().pop();
+    }
 
     // fn enter_rule(&self, listener: &mut dyn Any) {
     //     Ctx::enter(self, listener)
@@ -378,15 +394,21 @@ impl<'input, Ctx: CustomRuleContext<'input>> Tree<'input> for BaseParserRuleCont
         self.get_parent_ctx()
     }
 
-    fn has_parent(&self) -> bool { self.base.parent_ctx.borrow().is_some() }
+    fn has_parent(&self) -> bool {
+        self.base.parent_ctx.borrow().is_some()
+    }
 
-    fn get_payload(&self) -> Box<dyn Any> { unimplemented!() }
+    fn get_payload(&self) -> Box<dyn Any> {
+        unimplemented!()
+    }
 
     fn get_child(&self, i: usize) -> Option<Rc<<Self::Ctx as ParserNodeType<'input>>::Type>> {
         self.children.borrow().get(i).cloned()
     }
 
-    fn get_child_count(&self) -> usize { self.children.borrow().len() }
+    fn get_child_count(&self) -> usize {
+        self.children.borrow().len()
+    }
 
     // fn get_children<'a>(&'a self) -> Box<dyn ExactSizeIterator<Item=Rc<<Self::Ctx as ParserNodeType<'input>>::Type>> + 'a> where 'input:'a{
     //     let len = self.children.borrow().len();
@@ -469,7 +491,9 @@ where
     T: DerefSeal<Target = I> + 'input + Debug + Tid<'input>,
     I: ParserRuleContext<'input> + 'input + ?Sized,
 {
-    fn set_exception(&self, e: ANTLRError) { self.deref().set_exception(e) }
+    fn set_exception(&self, e: ANTLRError) {
+        self.deref().set_exception(e)
+    }
 
     fn set_start(&self, t: Option<<Self::TF as TokenFactory<'input>>::Tok>) {
         self.deref().set_start(t)
@@ -511,7 +535,9 @@ where
         self.deref().add_child(child)
     }
 
-    fn remove_last_child(&self) { self.deref().remove_last_child() }
+    fn remove_last_child(&self) {
+        self.deref().remove_last_child()
+    }
 
     // fn enter_rule(&self, listener: &mut dyn Any) { self.deref().enter_rule(listener) }
     //
@@ -525,11 +551,17 @@ where
     T: DerefSeal<Target = I> + 'input + Debug + Tid<'input>,
     I: ParserRuleContext<'input> + 'input + ?Sized,
 {
-    fn get_invoking_state(&self) -> isize { self.deref().get_invoking_state() }
+    fn get_invoking_state(&self) -> isize {
+        self.deref().get_invoking_state()
+    }
 
-    fn set_invoking_state(&self, t: isize) { self.deref().set_invoking_state(t) }
+    fn set_invoking_state(&self, t: isize) {
+        self.deref().set_invoking_state(t)
+    }
 
-    fn is_empty(&self) -> bool { self.deref().is_empty() }
+    fn is_empty(&self) -> bool {
+        self.deref().is_empty()
+    }
 
     fn get_parent_ctx(&self) -> Option<Rc<<I::Ctx as ParserNodeType<'input>>::Type>> {
         self.deref().get_parent_ctx()
@@ -545,9 +577,13 @@ where
     T: DerefSeal<Target = I> + 'input + Debug + Tid<'input>,
     I: ParserRuleContext<'input> + 'input + ?Sized,
 {
-    fn get_source_interval(&self) -> Interval { self.deref().get_source_interval() }
+    fn get_source_interval(&self) -> Interval {
+        self.deref().get_source_interval()
+    }
 
-    fn get_text(&self) -> String { self.deref().get_text() }
+    fn get_text(&self) -> String {
+        self.deref().get_text()
+    }
 }
 
 impl<'input, T, I> Tree<'input> for T
@@ -559,15 +595,21 @@ where
         self.deref().get_parent()
     }
 
-    fn has_parent(&self) -> bool { self.deref().has_parent() }
+    fn has_parent(&self) -> bool {
+        self.deref().has_parent()
+    }
 
-    fn get_payload(&self) -> Box<dyn Any> { self.deref().get_payload() }
+    fn get_payload(&self) -> Box<dyn Any> {
+        self.deref().get_payload()
+    }
 
     fn get_child(&self, i: usize) -> Option<Rc<<I::Ctx as ParserNodeType<'input>>::Type>> {
         self.deref().get_child(i)
     }
 
-    fn get_child_count(&self) -> usize { self.deref().get_child_count() }
+    fn get_child_count(&self) -> usize {
+        self.deref().get_child_count()
+    }
 
     fn get_children<'a>(
         &'a self,
@@ -589,13 +631,19 @@ where
     type TF = I::TF;
     type Ctx = I::Ctx;
 
-    fn get_rule_index(&self) -> usize { self.deref().get_rule_index() }
+    fn get_rule_index(&self) -> usize {
+        self.deref().get_rule_index()
+    }
 
     // fn type_rule_index() -> usize where Self: Sized { unimplemented!() }
 
-    fn get_alt_number(&self) -> isize { self.deref().get_alt_number() }
+    fn get_alt_number(&self) -> isize {
+        self.deref().get_alt_number()
+    }
 
-    fn set_alt_number(&self, _alt_number: isize) { self.deref().set_alt_number(_alt_number) }
+    fn set_alt_number(&self, _alt_number: isize) {
+        self.deref().set_alt_number(_alt_number)
+    }
 }
 
 //

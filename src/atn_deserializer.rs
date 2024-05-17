@@ -7,18 +7,12 @@ use uuid::Uuid;
 
 use crate::atn::ATN;
 use crate::atn_deserialization_options::ATNDeserializationOptions;
-use crate::atn_state::ATNBlockStart;
-use crate::atn_state::ATNDecisionState;
-use crate::atn_state::ATNState;
-use crate::atn_state::ATNStateType;
-use crate::atn_state::BaseATNState;
 use crate::atn_state::*;
 use crate::atn_type::ATNType;
 use crate::int_stream::EOF;
 use crate::interval_set::IntervalSet;
 use crate::lexer_action::LexerAction::*;
 use crate::lexer_action::*;
-use crate::transition::Transition;
 use crate::transition::*;
 
 lazy_static! {

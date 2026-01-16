@@ -26,11 +26,18 @@ better_any = "=0.1"
 parking_lot = "0.12"
 #qcell = { path="../qcell" }
 
+[dev-dependencies]
+criterion = { version = "0.3", features = ["html_reports"] }
+
 [lib]
 
 #[[test]]
 #name = "my_test"
 #path="tests/my_test.rs"
+
+[[bench]]
+name = "csv_benchmark"
+harness = false
 
 
 [profile.release]

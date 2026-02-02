@@ -126,8 +126,7 @@ pub struct BaseRuleContext<'input, ExtCtx: CustomRuleContext<'input>> {
 impl<'input, ExtCtx: CustomRuleContext<'input>> BaseRuleContext<'input, ExtCtx> {
     pub fn new_parser_ctx(
         parent_ctx: Option<Rc<<ExtCtx::Ctx as ParserNodeType<'input>>::Type>>,
-        invoking_state: isize,
-        ext: ExtCtx,
+        invoking_state: isize, ext: ExtCtx,
     ) -> Self {
         Self {
             parent_ctx: RefCell::new(parent_ctx.as_ref().map(Rc::downgrade)),
@@ -137,8 +136,7 @@ impl<'input, ExtCtx: CustomRuleContext<'input>> BaseRuleContext<'input, ExtCtx> 
     }
 
     pub fn copy_from<T: ParserRuleContext<'input, TF = ExtCtx::TF, Ctx = ExtCtx::Ctx> + ?Sized>(
-        ctx: &T,
-        ext: ExtCtx,
+        ctx: &T, ext: ExtCtx,
     ) -> Self {
         Self::new_parser_ctx(ctx.get_parent_ctx(), ctx.get_invoking_state(), ext)
     }
@@ -180,11 +178,7 @@ impl<'input, ExtCtx: CustomRuleContext<'input>> RuleContext<'input>
     fn set_invoking_state(&self, t: isize) { self.invoking_state.set(t) }
 
     fn get_parent_ctx(&self) -> Option<Rc<<ExtCtx::Ctx as ParserNodeType<'input>>::Type>> {
-        self.parent_ctx
-            .borrow()
-            .as_ref()
-            .map(Weak::upgrade)
-            .flatten()
+        self.parent_ctx.borrow().as_ref().and_then(Weak::upgrade)
     }
 
     //    fn get_parent_ctx(&self) -> Option<ParserRuleContextType> {

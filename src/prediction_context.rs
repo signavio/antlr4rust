@@ -1,12 +1,12 @@
 use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fmt::{Display, Error, Formatter};
-use std::hash::{BuildHasher, Hash, Hasher};
+use std::hash::{Hash, Hasher};
 use std::ops::Deref;
 
 use std::sync::{Arc, RwLock};
 
-use murmur3::murmur3_32::MurmurHasher;
+use crate::hash::{DefaultHasher, DefaultHasherBuilder};
 
 use crate::atn::ATN;
 use crate::dfa::ScopeExt;
@@ -147,8 +147,7 @@ lazy_static! {
 
 impl PredictionContext {
     pub fn new_array(
-        parents: Vec<Option<Arc<PredictionContext>>>,
-        return_states: Vec<isize>,
+        parents: Vec<Option<Arc<PredictionContext>>>, return_states: Vec<isize>,
     ) -> PredictionContext {
         PredictionContext::Array(ArrayPredictionContext {
             cached_hash: 0,
@@ -158,8 +157,7 @@ impl PredictionContext {
     }
 
     pub fn new_singleton(
-        parent_ctx: Option<Arc<PredictionContext>>,
-        return_state: isize,
+        parent_ctx: Option<Arc<PredictionContext>>, return_state: isize,
     ) -> PredictionContext {
         PredictionContext::Singleton(SingletonPredictionContext {
             cached_hash: 0,
@@ -180,7 +178,7 @@ impl PredictionContext {
     }
 
     pub fn calc_hash(&mut self) {
-        let mut hasher = MurmurHasher::default();
+        let mut hasher = DefaultHasher::default();
         match self {
             PredictionContext::Singleton(SingletonPredictionContext {
                 parent_ctx,
@@ -354,9 +352,7 @@ impl PredictionContext {
     }
 
     fn merge_singletons(
-        a: &SingletonPredictionContext,
-        b: &SingletonPredictionContext,
-        root_is_wildcard: bool,
+        a: &SingletonPredictionContext, b: &SingletonPredictionContext, root_is_wildcard: bool,
         merge_cache: &mut Option<&mut MergeCache>,
     ) -> Arc<PredictionContext> {
         Self::merge_root(a, b, root_is_wildcard).unwrap_or_else(|| {
@@ -396,9 +392,7 @@ impl PredictionContext {
     }
 
     fn merge_root(
-        a: &SingletonPredictionContext,
-        b: &SingletonPredictionContext,
-        root_is_wildcard: bool,
+        a: &SingletonPredictionContext, b: &SingletonPredictionContext, root_is_wildcard: bool,
     ) -> Option<Arc<PredictionContext>> {
         if root_is_wildcard {
             if a.is_empty() || b.is_empty() {
@@ -432,10 +426,8 @@ impl PredictionContext {
     }
 
     fn merge_arrays(
-        a: Cow<'_, ArrayPredictionContext>,
-        b: Cow<'_, ArrayPredictionContext>,
-        root_is_wildcard: bool,
-        merge_cache: &mut Option<&mut MergeCache>,
+        a: Cow<'_, ArrayPredictionContext>, b: Cow<'_, ArrayPredictionContext>,
+        root_is_wildcard: bool, merge_cache: &mut Option<&mut MergeCache>,
     ) -> PredictionContext {
         //        let a = a.deref();
         //        let b = b.deref();
@@ -515,8 +507,7 @@ impl PredictionContext {
     }
 
     pub fn from_rule_context<'input, Ctx: ParserNodeType<'input>>(
-        atn: &ATN,
-        outer_context: &Ctx::Type,
+        atn: &ATN, outer_context: &Ctx::Type,
     ) -> Arc<PredictionContext> {
         if outer_context.get_parent_ctx().is_none() || outer_context.is_empty()
         /*ptr::eq(outer_context, empty_ctx().as_ref())*/
@@ -562,31 +553,20 @@ impl PredictionContext {
 #[derive(Debug)]
 pub struct PredictionContextCache {
     //todo test dashmap
-    cache: RwLock<HashMap<Arc<PredictionContext>, Arc<PredictionContext>, MurmurHasherBuilder>>,
-}
-
-#[doc(hidden)]
-#[derive(Debug)]
-pub struct MurmurHasherBuilder {}
-
-impl BuildHasher for MurmurHasherBuilder {
-    type Hasher = MurmurHasher;
-
-    fn build_hasher(&self) -> Self::Hasher { MurmurHasher::default() }
+    cache: RwLock<HashMap<Arc<PredictionContext>, Arc<PredictionContext>, DefaultHasherBuilder>>,
 }
 
 impl PredictionContextCache {
     #[doc(hidden)]
     pub fn new() -> PredictionContextCache {
         PredictionContextCache {
-            cache: RwLock::new(HashMap::with_hasher(MurmurHasherBuilder {})),
+            cache: RwLock::new(HashMap::with_hasher(DefaultHasherBuilder {})),
         }
     }
 
     #[doc(hidden)]
     pub fn get_shared_context(
-        &self,
-        context: &Arc<PredictionContext>,
+        &self, context: &Arc<PredictionContext>,
         visited: &mut HashMap<*const PredictionContext, Arc<PredictionContext>>,
     ) -> Arc<PredictionContext> {
         if context.is_empty() {

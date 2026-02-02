@@ -1,6 +1,6 @@
 use std::hash::{Hash, Hasher};
 
-use murmur3::murmur3_32::MurmurHasher;
+use crate::hash::DefaultHasher;
 
 use crate::int_stream::IntStream;
 use crate::lexer::Lexer;
@@ -22,7 +22,7 @@ impl LexerActionExecutor {
         //        let mut hasher = ;
         let cached_hash = lexer_actions
             .iter()
-            .fold(MurmurHasher::default(), |mut acc, x| {
+            .fold(DefaultHasher::default(), |mut acc, x| {
                 x.hash(&mut acc);
                 acc
             })
@@ -34,8 +34,7 @@ impl LexerActionExecutor {
     }
 
     pub(crate) fn new_copy_append(
-        old: Option<&Self>,
-        lexer_action: LexerAction,
+        old: Option<&Self>, lexer_action: LexerAction,
     ) -> LexerActionExecutor {
         let mut new = old
             .cloned()

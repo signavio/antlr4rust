@@ -191,10 +191,8 @@ impl<'input, I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'i
 
     fn get_vocabulary(&self) -> &dyn Vocabulary { &**VOCABULARY }
     fn sempred(
-        _localctx: Option<&(dyn SimpleLRParserContext<'input> + 'input)>,
-        rule_index: isize,
-        pred_index: isize,
-        recog: &mut BaseParserType<'input, I>,
+        _localctx: Option<&(dyn SimpleLRParserContext<'input> + 'input)>, rule_index: isize,
+        pred_index: isize, recog: &mut BaseParserType<'input, I>,
     ) -> bool {
         match rule_index {
             1 => SimpleLRParser::<'input, I, _>::a_sempred(
@@ -212,8 +210,7 @@ where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
 {
     fn a_sempred(
-        _localctx: Option<&AContext<'input>>,
-        pred_index: isize,
+        _localctx: Option<&AContext<'input>>, pred_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) -> bool {
         match pred_index {
@@ -251,8 +248,7 @@ antlr_rust::type_id! {SContextExt<'a>}
 
 impl<'input> SContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<SContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -341,8 +337,7 @@ antlr_rust::type_id! {AContextExt<'a>}
 
 impl<'input> AContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn SimpleLRParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<AContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,

@@ -231,8 +231,7 @@ antlr_rust::type_id! {AContextExt<'a>}
 
 impl<'input> AContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn ReferenceToATNParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn ReferenceToATNParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<AContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,

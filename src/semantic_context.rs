@@ -37,9 +37,7 @@ impl SemanticContext {
         is_ctx_dependent: false,
     };
     pub(crate) fn evaluate<'a, T: Parser<'a>>(
-        &self,
-        parser: &mut T,
-        outer_context: &<T::Node as ParserNodeType<'a>>::Type,
+        &self, parser: &mut T, outer_context: &<T::Node as ParserNodeType<'a>>::Type,
     ) -> bool {
         match self {
             SemanticContext::Predicate {
@@ -60,9 +58,7 @@ impl SemanticContext {
         }
     }
     pub(crate) fn eval_precedence<'a, 'b, T: Parser<'b>>(
-        &'a self,
-        parser: &T,
-        outer_context: &<T::Node as ParserNodeType<'b>>::Type,
+        &'a self, parser: &T, outer_context: &<T::Node as ParserNodeType<'b>>::Type,
     ) -> Option<Cow<'a, SemanticContext>> {
         match self {
             SemanticContext::Predicate { .. } => Some(Borrowed(self)),
@@ -191,8 +187,7 @@ impl SemanticContext {
     }
 
     pub fn and(
-        a: Option<impl Borrow<SemanticContext>>,
-        b: Option<impl Borrow<SemanticContext>>,
+        a: Option<impl Borrow<SemanticContext>>, b: Option<impl Borrow<SemanticContext>>,
     ) -> SemanticContext {
         match (a, b) {
             (None, None) => Self::NONE,
@@ -213,8 +208,7 @@ impl SemanticContext {
     }
 
     pub fn or(
-        a: Option<impl Borrow<SemanticContext>>,
-        b: Option<impl Borrow<SemanticContext>>,
+        a: Option<impl Borrow<SemanticContext>>, b: Option<impl Borrow<SemanticContext>>,
     ) -> SemanticContext {
         match (a, b) {
             (None, None) => Self::NONE,

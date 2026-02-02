@@ -191,8 +191,7 @@ impl<'input, Input: CharStream<From<'input>>>
     for XMLLexerActions
 {
     fn action(
-        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>,
-        rule_index: isize,
+        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>, rule_index: isize,
         action_index: isize,
         recog: &mut BaseLexer<'input, XMLLexerActions, Input, LocalTokenFactory<'input>>,
     ) {
@@ -202,8 +201,7 @@ impl<'input, Input: CharStream<From<'input>>>
         }
     }
     fn sempred(
-        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>,
-        rule_index: isize,
+        _localctx: Option<&EmptyContext<'input, LocalTokenFactory<'input>>>, rule_index: isize,
         pred_index: isize,
         recog: &mut BaseLexer<'input, XMLLexerActions, Input, LocalTokenFactory<'input>>,
     ) -> bool {
@@ -216,8 +214,7 @@ impl<'input, Input: CharStream<From<'input>>>
 
 impl<'input, Input: CharStream<From<'input>>> XMLLexer<'input, Input> {
     fn CLOSE_action(
-        _localctx: Option<&LexerContext<'input>>,
-        action_index: isize,
+        _localctx: Option<&LexerContext<'input>>, action_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) {
         match action_index {
@@ -229,8 +226,7 @@ impl<'input, Input: CharStream<From<'input>>> XMLLexer<'input, Input> {
         }
     }
     fn COMMENT_sempred(
-        _localctx: Option<&LexerContext<'input>>,
-        pred_index: isize,
+        _localctx: Option<&LexerContext<'input>>, pred_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) -> bool {
         match pred_index {

@@ -26,13 +26,14 @@ use crate::lexer_atn_simulator::ERROR_DFA_STATE_REF;
 use crate::parser::{Parser, ParserNodeType};
 
 use crate::prediction_context::{
-    MurmurHasherBuilder, PredictionContext, PredictionContextCache, EMPTY_PREDICTION_CONTEXT,
+    PredictionContext, PredictionContextCache, EMPTY_PREDICTION_CONTEXT,
     PREDICTION_CONTEXT_EMPTY_RETURN_STATE,
 };
 use crate::prediction_mode::*;
 use crate::semantic_context::SemanticContext;
 use crate::token::{Token, TOKEN_EOF, TOKEN_EPSILON};
 
+use crate::hash::DefaultHasherBuilder;
 use crate::token_stream::TokenStream;
 use crate::transition::{
     ActionTransition, EpsilonTransition, PrecedencePredicateTransition, PredicateTransition,
@@ -121,14 +122,13 @@ impl<'a, 'input, T: Parser<'input> + 'a> Local<'a, 'input, T> {
 pub(crate) type MergeCache = HashMap<
     (Arc<PredictionContext>, Arc<PredictionContext>),
     Arc<PredictionContext>,
-    MurmurHasherBuilder,
+    DefaultHasherBuilder,
 >;
 
 impl ParserATNSimulator {
     /// creates new `ParserATNSimulator`
     pub fn new(
-        atn: Arc<ATN>,
-        decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
+        atn: Arc<ATN>, decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
         shared_context_cache: Arc<PredictionContextCache>,
     ) -> ParserATNSimulator {
         ParserATNSimulator {
@@ -152,12 +152,10 @@ impl ParserATNSimulator {
 
     /// Called by generated parser to choose an alternative when LL(1) parsing is not enough
     pub fn adaptive_predict<'a, T: Parser<'a>>(
-        &self,
-        decision: isize,
-        parser: &mut T,
+        &self, decision: isize, parser: &mut T,
     ) -> Result<isize, ANTLRError> {
         self.start_index.set(parser.get_input_stream_mut().index());
-        let mut merge_cache: MergeCache = HashMap::with_hasher(MurmurHasherBuilder {});
+        let mut merge_cache: MergeCache = HashMap::with_hasher(DefaultHasherBuilder {});
         let mut local = Local {
             outer_context: parser.get_parser_rule_context().clone(),
             dfa: self.decision_to_dfa()[decision as usize]
@@ -229,9 +227,7 @@ impl ParserATNSimulator {
 
     #[allow(non_snake_case)]
     fn exec_atn<'a, T: Parser<'a>>(
-        &self,
-        local: &mut Local<'_, 'a, T>,
-        s0: DFAStateRef,
+        &self, local: &mut Local<'_, 'a, T>, s0: DFAStateRef,
     ) -> Result<isize, ANTLRError> {
         let mut previousD = s0;
 
@@ -351,9 +347,7 @@ impl ParserATNSimulator {
 
     #[allow(non_snake_case)]
     fn get_existing_target_state(
-        dfa: &DFA,
-        previousD: DFAStateRef,
-        t: isize,
+        dfa: &DFA, previousD: DFAStateRef, t: isize,
     ) -> Option<DFAStateRef> {
         dfa.states[previousD]
             .edges
@@ -531,11 +525,7 @@ impl ParserATNSimulator {
 
     // ATNConfigSet is pretty big so should be boxed to move it cheaper
     fn compute_reach_set<'a, T: Parser<'a>>(
-        &self,
-        closure: &ATNConfigSet,
-        t: isize,
-        full_ctx: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, closure: &ATNConfigSet, t: isize, full_ctx: bool, local: &mut Local<'_, 'a, T>,
     ) -> Option<ATNConfigSet> {
         //        println!("in computeReachSet, starting closure: {:?}",closure);
         let mut intermediate = ATNConfigSet::new_base_atnconfig_set(full_ctx);
@@ -633,10 +623,7 @@ impl ParserATNSimulator {
     }
 
     fn remove_all_configs_not_in_rule_stop_state(
-        &self,
-        configs: ATNConfigSet,
-        look_to_end_of_rule: bool,
-        merge_cache: &mut MergeCache,
+        &self, configs: ATNConfigSet, look_to_end_of_rule: bool, merge_cache: &mut MergeCache,
     ) -> ATNConfigSet {
         if self.all_configs_in_rule_stop_state(&configs) {
             return configs;
@@ -669,10 +656,7 @@ impl ParserATNSimulator {
     }
 
     fn compute_start_state<'a, T: Parser<'a>>(
-        &self,
-        a: ATNStateRef,
-        initial_ctx: Arc<PredictionContext>,
-        full_ctx: bool,
+        &self, a: ATNStateRef, initial_ctx: Arc<PredictionContext>, full_ctx: bool,
         local: &mut Local<'_, 'a, T>,
     ) -> ATNConfigSet {
         //        let initial_ctx = PredictionContext::prediction_context_from_rule_context(self.atn(),ctx);
@@ -705,9 +689,7 @@ impl ParserATNSimulator {
     }
 
     fn apply_precedence_filter<'a, T: Parser<'a>>(
-        &self,
-        configs: &ATNConfigSet,
-        local: &mut Local<'_, 'a, T>,
+        &self, configs: &ATNConfigSet, local: &mut Local<'_, 'a, T>,
     ) -> ATNConfigSet {
         //println!("apply_precedence_filter");
         let mut states_from_alt1 = HashMap::new();
@@ -766,10 +748,7 @@ impl ParserATNSimulator {
     }
 
     fn get_preds_for_ambig_alts(
-        &self,
-        ambig_alts: &BitSet,
-        configs: &ATNConfigSet,
-        nalts: usize,
+        &self, ambig_alts: &BitSet, configs: &ATNConfigSet, nalts: usize,
     ) -> Option<Vec<SemanticContext>> {
         let mut alt_to_pred = Vec::with_capacity(nalts + 1);
         alt_to_pred.resize_with(nalts + 1, || None);
@@ -806,9 +785,7 @@ impl ParserATNSimulator {
     }
 
     fn get_predicate_predictions(
-        &self,
-        ambig_alts: &BitSet,
-        alt_to_pred: Vec<SemanticContext>,
+        &self, ambig_alts: &BitSet, alt_to_pred: Vec<SemanticContext>,
     ) -> Vec<PredPrediction> {
         let mut pairs = vec![];
         let mut contains_predicate = false;
@@ -832,9 +809,7 @@ impl ParserATNSimulator {
     }
 
     fn get_syn_valid_or_sem_invalid_alt_that_finished_decision_entry_rule<'a, T: Parser<'a>>(
-        &self,
-        configs: &ATNConfigSet,
-        local: &mut Local<'_, 'a, T>,
+        &self, configs: &ATNConfigSet, local: &mut Local<'_, 'a, T>,
     ) -> isize {
         let (sem_valid_configs, sem_invalid_configs) =
             self.split_according_to_semantic_validity(configs, local);
@@ -855,9 +830,7 @@ impl ParserATNSimulator {
     }
 
     fn split_according_to_semantic_validity<'a, T: Parser<'a>>(
-        &self,
-        configs: &ATNConfigSet,
-        local: &mut Local<'_, 'a, T>,
+        &self, configs: &ATNConfigSet, local: &mut Local<'_, 'a, T>,
     ) -> (ATNConfigSet, ATNConfigSet) {
         let mut succeeded = ATNConfigSet::new_base_atnconfig_set(configs.full_context());
         let mut failed = ATNConfigSet::new_base_atnconfig_set(configs.full_context());
@@ -896,10 +869,7 @@ impl ParserATNSimulator {
     }
 
     fn eval_semantic_context<'a, T: Parser<'a>>(
-        &self,
-        local: &mut Local<'_, 'a, T>,
-        pred_predictions: &Vec<PredPrediction>,
-        complete: bool,
+        &self, local: &mut Local<'_, 'a, T>, pred_predictions: &Vec<PredPrediction>, complete: bool,
     ) -> BitSet {
         let mut predictions = BitSet::new();
         for pred in pred_predictions {
@@ -927,24 +897,16 @@ impl ParserATNSimulator {
     }
 
     fn eval_predicate<'a, T: Parser<'a>>(
-        &self,
-        local: &mut Local<'_, 'a, T>,
-        pred: impl Borrow<SemanticContext>,
-        _alt: isize,
+        &self, local: &mut Local<'_, 'a, T>, pred: impl Borrow<SemanticContext>, _alt: isize,
         _full_ctx: bool,
     ) -> bool {
         pred.borrow().evaluate(local.parser, &*local.outer_context)
     }
 
     fn closure<'a, T: Parser<'a>>(
-        &self,
-        config: ATNConfig,
-        configs: &mut ATNConfigSet,
-        closure_busy: &mut HashSet<ATNConfig>,
-        collect_predicates: bool,
-        full_ctx: bool,
-        treat_eofas_epsilon: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, config: ATNConfig, configs: &mut ATNConfigSet,
+        closure_busy: &mut HashSet<ATNConfig>, collect_predicates: bool, full_ctx: bool,
+        treat_eofas_epsilon: bool, local: &mut Local<'_, 'a, T>,
     ) {
         //        println!("cl{}", config.get_state());
         let initial_depth = 0;
@@ -964,15 +926,9 @@ impl ParserATNSimulator {
     }
 
     fn closure_checking_stop_state<'a, T: Parser<'a>>(
-        &self,
-        mut config: ATNConfig,
-        configs: &mut ATNConfigSet,
-        closure_busy: &mut HashSet<ATNConfig>,
-        collect_predicates: bool,
-        full_ctx: bool,
-        depth: isize,
-        treat_eofas_epsilon: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, mut config: ATNConfig, configs: &mut ATNConfigSet,
+        closure_busy: &mut HashSet<ATNConfig>, collect_predicates: bool, full_ctx: bool,
+        depth: isize, treat_eofas_epsilon: bool, local: &mut Local<'_, 'a, T>,
     ) {
         //        println!("closure({:?})",config);
         if let RuleStopState = self.atn().states[config.get_state()].get_state_type() {
@@ -1051,15 +1007,9 @@ impl ParserATNSimulator {
     }
 
     fn closure_work<'a, T: Parser<'a>>(
-        &self,
-        config: ATNConfig,
-        configs: &mut ATNConfigSet,
-        closure_busy: &mut HashSet<ATNConfig>,
-        collect_predicates: bool,
-        full_ctx: bool,
-        depth: isize,
-        treat_eofas_epsilon: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, config: ATNConfig, configs: &mut ATNConfigSet,
+        closure_busy: &mut HashSet<ATNConfig>, collect_predicates: bool, full_ctx: bool,
+        depth: isize, treat_eofas_epsilon: bool, local: &mut Local<'_, 'a, T>,
     ) {
         //println!("depth {}",depth);
         //        println!("closure_work started {:?}",config);
@@ -1220,14 +1170,8 @@ impl ParserATNSimulator {
     //    fn get_rule_name(&self, index: isize) -> String { unimplemented!() }
 
     fn get_epsilon_target<'a, T: Parser<'a>>(
-        &self,
-        config: &ATNConfig,
-        t: &dyn Transition,
-        collect_predicates: bool,
-        in_context: bool,
-        full_ctx: bool,
-        treat_eofas_epsilon: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, config: &ATNConfig, t: &dyn Transition, collect_predicates: bool, in_context: bool,
+        full_ctx: bool, treat_eofas_epsilon: bool, local: &mut Local<'_, 'a, T>,
     ) -> Option<ATNConfig> {
         match t.get_serialization_type() {
             TransitionType::TRANSITION_EPSILON => {
@@ -1273,13 +1217,8 @@ impl ParserATNSimulator {
     }
 
     fn precedence_transition<'a, T: Parser<'a>>(
-        &self,
-        config: &ATNConfig,
-        pt: &PrecedencePredicateTransition,
-        collect_predicates: bool,
-        in_context: bool,
-        full_ctx: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, config: &ATNConfig, pt: &PrecedencePredicateTransition, collect_predicates: bool,
+        in_context: bool, full_ctx: bool, local: &mut Local<'_, 'a, T>,
     ) -> Option<ATNConfig> {
         let target = self.atn().states[pt.target].deref();
         if collect_predicates && in_context {
@@ -1309,13 +1248,8 @@ impl ParserATNSimulator {
     }
 
     fn pred_transition<'a, T: Parser<'a>>(
-        &self,
-        config: &ATNConfig,
-        pt: &PredicateTransition,
-        collect_predicates: bool,
-        in_context: bool,
-        full_ctx: bool,
-        local: &mut Local<'_, 'a, T>,
+        &self, config: &ATNConfig, pt: &PredicateTransition, collect_predicates: bool,
+        in_context: bool, full_ctx: bool, local: &mut Local<'_, 'a, T>,
     ) -> Option<ATNConfig> {
         let target = self.atn().states[pt.target].deref();
         if collect_predicates && (!pt.is_ctx_dependent || (pt.is_ctx_dependent && in_context)) {
@@ -1376,10 +1310,7 @@ impl ParserATNSimulator {
     //    fn dump_dead_end_configs(&self, nvae: * NoViableAltError) { unimplemented!() }
     //
     fn no_viable_alt<'a, T: Parser<'a>>(
-        &self,
-        local: &mut Local<'_, 'a, T>,
-        _configs: &ATNConfigSet,
-        start_index: isize,
+        &self, local: &mut Local<'_, 'a, T>, _configs: &ATNConfigSet, start_index: isize,
     ) -> ANTLRError {
         let start_token = local.parser.get_input_stream().get(start_index).borrow();
         let start_token = Token::to_owned(start_token);
@@ -1452,13 +1383,8 @@ impl ParserATNSimulator {
     }
 
     fn report_attempting_full_context<'a, T: Parser<'a>>(
-        &self,
-        dfa: &DFA,
-        conflicting_alts: &BitSet,
-        configs: &ATNConfigSet,
-        start_index: isize,
-        stop_index: isize,
-        parser: &mut T,
+        &self, dfa: &DFA, conflicting_alts: &BitSet, configs: &ATNConfigSet, start_index: isize,
+        stop_index: isize, parser: &mut T,
     ) {
         //        let ambig_index = parser.get_current_token().get_token_index();
         parser
@@ -1474,13 +1400,8 @@ impl ParserATNSimulator {
     }
 
     fn report_context_sensitivity<'a, T: Parser<'a>>(
-        &self,
-        dfa: &DFA,
-        prediction: isize,
-        configs: &ATNConfigSet,
-        start_index: isize,
-        stop_index: isize,
-        parser: &mut T,
+        &self, dfa: &DFA, prediction: isize, configs: &ATNConfigSet, start_index: isize,
+        stop_index: isize, parser: &mut T,
     ) {
         parser
             .get_error_lister_dispatch()
@@ -1488,14 +1409,8 @@ impl ParserATNSimulator {
     }
 
     fn report_ambiguity<'a, T: Parser<'a>>(
-        &self,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        exact: bool,
-        ambig_alts: &BitSet,
-        configs: &ATNConfigSet,
-        parser: &mut T,
+        &self, dfa: &DFA, start_index: isize, stop_index: isize, exact: bool, ambig_alts: &BitSet,
+        configs: &ATNConfigSet, parser: &mut T,
     ) {
         parser.get_error_lister_dispatch().report_ambiguity(
             parser,

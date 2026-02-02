@@ -52,8 +52,7 @@ pub trait ErrorStrategy<'a, T: Parser<'a>>: Tid<'a> {
     ///
     /// Returns `ANTLRError` if can't recover from unexpected input symbol
     fn recover_inline(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) -> Result<<T::TF as TokenFactory<'a>>::Tok, ANTLRError>;
 
     /// This method is called to recover from error `e`. This method is
@@ -103,8 +102,7 @@ impl<'a, T: Parser<'a> + TidAble<'a>> ErrorStrategy<'a, T> for Box<dyn ErrorStra
 
     #[inline(always)]
     fn recover_inline(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) -> Result<<T::TF as TokenFactory<'a>>::Tok, ANTLRError> {
         self.deref_mut().recover_inline(recognizer)
     }
@@ -161,15 +159,13 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn begin_error_condition<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        _recognizer: &T,
+        &mut self, _recognizer: &T,
     ) {
         self.error_recovery_mode = true;
     }
 
     fn end_error_condition<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        _recognizer: &T,
+        &mut self, _recognizer: &T,
     ) {
         self.error_recovery_mode = false;
         self.last_error_index = -1;
@@ -177,9 +173,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn report_no_viable_alternative<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &mut T,
-        e: &NoViableAltError,
+        &self, recognizer: &mut T, e: &NoViableAltError,
     ) -> String {
         let input = if e.start_token.token_type == TOKEN_EOF {
             "<EOF>".to_owned()
@@ -194,9 +188,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn report_input_mismatch<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &T,
-        e: &InputMisMatchError,
+        &self, recognizer: &T, e: &InputMisMatchError,
     ) -> String {
         format!(
             "mismatched input {} expecting {}",
@@ -208,9 +200,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn report_failed_predicate<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &T,
-        e: &FailedPredicateError,
+        &self, recognizer: &T, e: &FailedPredicateError,
     ) -> String {
         format!(
             "rule {} {}",
@@ -220,8 +210,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn report_unwanted_token<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) {
         if self.in_error_recovery_mode(recognizer) {
             return;
@@ -238,8 +227,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn report_missing_token<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) {
         if self.in_error_recovery_mode(recognizer) {
             return;
@@ -260,8 +248,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn single_token_insertion<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) -> bool {
         let current_token = recognizer.get_input_stream_mut().la(1);
 
@@ -284,8 +271,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn single_token_deletion<'a, T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        recognizer: &'a mut T,
+        &mut self, recognizer: &'a mut T,
     ) -> Option<&'a <T::TF as TokenFactory<'input>>::Tok> {
         let next_token_type = recognizer.get_input_stream_mut().la(2);
         let expecting = self.get_expected_tokens(recognizer);
@@ -301,8 +287,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn get_missing_symbol<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &mut T,
+        &self, recognizer: &mut T,
     ) -> <T::TF as TokenFactory<'input>>::Tok {
         let expected = self.get_expected_tokens(recognizer);
         let expected_token_type = expected.get_min().unwrap_or(TOKEN_INVALID_TYPE);
@@ -339,8 +324,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn get_expected_tokens<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &T,
+        &self, recognizer: &T,
     ) -> IntervalSet {
         recognizer.get_expected_tokens()
     }
@@ -355,8 +339,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn get_error_recovery_set<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &T,
+        &self, recognizer: &T,
     ) -> IntervalSet {
         let atn = recognizer.get_interpreter().atn();
         let mut ctx = Some(recognizer.get_parser_rule_context().clone());
@@ -378,9 +361,7 @@ impl<'input, Ctx: ParserNodeType<'input>> DefaultErrorStrategy<'input, Ctx> {
     }
 
     fn consume_until<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &mut self,
-        recognizer: &mut T,
-        set: &IntervalSet,
+        &mut self, recognizer: &mut T, set: &IntervalSet,
     ) {
         let mut ttype = recognizer.get_input_stream_mut().la(1);
         while ttype != TOKEN_EOF && !set.contains(ttype) {
@@ -394,8 +375,7 @@ impl<'a, T: Parser<'a>> ErrorStrategy<'a, T> for DefaultErrorStrategy<'a, T::Nod
     fn reset(&mut self, recognizer: &mut T) { self.end_error_condition(recognizer) }
 
     fn recover_inline(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) -> Result<<T::TF as TokenFactory<'a>>::Tok, ANTLRError> {
         let t = self
             .single_token_deletion(recognizer)
@@ -555,9 +535,7 @@ impl<'input, Ctx: ParserNodeType<'input>> BailErrorStrategy<'input, Ctx> {
     pub fn new() -> Self { Self(DefaultErrorStrategy::new()) }
 
     fn process_error<T: Parser<'input, Node = Ctx, TF = Ctx::TF>>(
-        &self,
-        recognizer: &mut T,
-        e: &ANTLRError,
+        &self, recognizer: &mut T, e: &ANTLRError,
     ) -> ANTLRError {
         let mut ctx = recognizer.get_parser_rule_context().clone();
         let _: Option<()> = try {
@@ -591,8 +569,7 @@ impl<'a, T: Parser<'a>> ErrorStrategy<'a, T> for BailErrorStrategy<'a, T::Node> 
 
     #[cold]
     fn recover_inline(
-        &mut self,
-        recognizer: &mut T,
+        &mut self, recognizer: &mut T,
     ) -> Result<<T::TF as TokenFactory<'a>>::Tok, ANTLRError> {
         let err = ANTLRError::InputMismatchError(InputMisMatchError::new(recognizer));
 

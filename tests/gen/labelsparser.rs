@@ -213,10 +213,8 @@ impl<'input, I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'i
 
     fn get_vocabulary(&self) -> &dyn Vocabulary { &**VOCABULARY }
     fn sempred(
-        _localctx: Option<&(dyn LabelsParserContext<'input> + 'input)>,
-        rule_index: isize,
-        pred_index: isize,
-        recog: &mut BaseParserType<'input, I>,
+        _localctx: Option<&(dyn LabelsParserContext<'input> + 'input)>, rule_index: isize,
+        pred_index: isize, recog: &mut BaseParserType<'input, I>,
     ) -> bool {
         match rule_index {
             1 => LabelsParser::<'input, I, _>::e_sempred(
@@ -234,8 +232,7 @@ where
     I: TokenStream<'input, TF = LocalTokenFactory<'input>> + TidAble<'input>,
 {
     fn e_sempred(
-        _localctx: Option<&EContext<'input>>,
-        pred_index: isize,
+        _localctx: Option<&EContext<'input>>, pred_index: isize,
         recog: &mut <Self as Deref>::Target,
     ) -> bool {
         match pred_index {
@@ -277,8 +274,7 @@ antlr_rust::type_id! {SContextExt<'a>}
 
 impl<'input> SContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<SContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -402,8 +398,7 @@ antlr_rust::type_id! {EContextExt<'a>}
 
 impl<'input> EContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn LabelsParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<EContextAll<'input>> {
         Rc::new(EContextAll::Error(BaseParserRuleContext::new_parser_ctx(
             parent,

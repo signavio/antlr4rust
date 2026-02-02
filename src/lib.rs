@@ -7,7 +7,6 @@
 #![feature(specialization)]
 #![feature(coerce_unsized)]
 #![feature(associated_type_defaults)]
-#![feature(generic_associated_types)]
 // #![feature(generic_associated_types)]
 #![warn(rust_2018_idioms)]
 #![warn(missing_docs)] // warn if there is missing docs
@@ -169,6 +168,7 @@ mod utils;
 //pub mod tokenstream_rewriter_test;
 mod atn_type;
 // mod context_factory;
+mod hash;
 pub mod rule_context;
 pub mod vocabulary;
 //#[cfg(test)]

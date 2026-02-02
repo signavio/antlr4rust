@@ -247,8 +247,7 @@ antlr_rust::type_id! {CsvFileContextExt<'a>}
 
 impl<'input> CsvFileContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<CsvFileContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -382,8 +381,7 @@ antlr_rust::type_id! {HdrContextExt<'a>}
 
 impl<'input> HdrContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<HdrContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -477,8 +475,7 @@ antlr_rust::type_id! {RowContextExt<'a>}
 
 impl<'input> RowContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<RowContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -610,8 +607,7 @@ antlr_rust::type_id! {FieldContextExt<'a>}
 
 impl<'input> FieldContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn CSVParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<FieldContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,

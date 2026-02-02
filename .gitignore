@@ -3,6 +3,7 @@
 /target
 /tests/gen/*.tokens
 /tests/gen/*.interp
+/tools/*.jar
 **/*.rs.bk
 *.iml
 Cargo.lock

@@ -34,9 +34,7 @@ fn collect_to_string<'b, T: Borrow<str> + 'b>(
 
 impl VocabularyImpl {
     pub fn new<'b, T: Borrow<str> + 'b, Iter: IntoIterator<Item = &'b Option<T>>>(
-        literal_names: Iter,
-        symbolic_names: Iter,
-        display_names: Option<Iter>,
+        literal_names: Iter, symbolic_names: Iter, display_names: Option<Iter>,
     ) -> VocabularyImpl {
         //        let display_names = display_names.unwrap_or(&[]);
         VocabularyImpl {
@@ -61,7 +59,7 @@ impl VocabularyImpl {
 
         for (i, tn) in token_names.iter().enumerate() {
             match tn {
-                Some(tn) if !tn.is_empty() && tn.chars().next().unwrap() == '\'' => {
+                Some(tn) if !tn.is_empty() && tn.starts_with('\'') => {
                     symbolic_names[i] = None;
                     continue;
                 }
@@ -110,7 +108,7 @@ impl Vocabulary for VocabularyImpl {
             .and_then(|x| x.as_deref())
             .or_else(|| self.get_literal_name(token_type))
             .or_else(|| self.get_symbolic_name(token_type))
-            .map(|x| Borrowed(x))
+            .map(Borrowed)
             .unwrap_or(Owned(token_type.to_string()))
     }
 }

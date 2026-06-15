@@ -9,7 +9,7 @@ This is a fork of https://github.com/rrevenantt/antlr4rust because rrevenantt do
 ![cargo test](https://github.com/rrevenantt/antlr4rust/workflows/cargo%20test/badge.svg)
 [![](https://tokei.rs/b1/github/rrevenantt/antlr4rust)](https://github.com/rrevenantt/antlr4rust)
 
-[ANTLR4](https://github.com/antlr/antlr4) runtime for Rust programming language.
+[ANTLR4](https://github.com/antlr/antlr4) runtime for the Rust programming language.
 
 For examples you can see [grammars](grammars), [tests/gen](tests/gen) for corresponding generated code 
 and [tests/my_tests.rs](tests/my_test.rs) for actual usage examples

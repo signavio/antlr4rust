@@ -27,8 +27,7 @@ impl Debug for BaseATNSimulator {
 
 impl BaseATNSimulator {
     pub fn new_base_atnsimulator(
-        atn: Arc<ATN>,
-        decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
+        atn: Arc<ATN>, decision_to_dfa: Arc<Vec<RwLock<DFA>>>,
         shared_context_cache: Arc<PredictionContextCache>,
     ) -> BaseATNSimulator {
         BaseATNSimulator {

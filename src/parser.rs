@@ -38,9 +38,7 @@ pub trait Parser<'input>: Recognizer<'input> {
     //fn sempred(&mut self, _localctx: Option<&dyn ParserRuleContext>, rule_index: isize, action_index: isize) -> bool { true }
 
     fn precpred(
-        &self,
-        localctx: Option<&<Self::Node as ParserNodeType<'input>>::Type>,
-        precedence: isize,
+        &self, localctx: Option<&<Self::Node as ParserNodeType<'input>>::Type>, precedence: isize,
     ) -> bool;
 
     //    fn get_error_handler(&self) -> ErrorStrategy;
@@ -55,10 +53,7 @@ pub trait Parser<'input>: Recognizer<'input> {
         Self: Sized;
     fn remove_error_listeners(&mut self);
     fn notify_error_listeners(
-        &self,
-        msg: String,
-        offending_token: Option<isize>,
-        err: Option<&ANTLRError>,
+        &self, msg: String, offending_token: Option<isize>, err: Option<&ANTLRError>,
     );
     fn get_error_lister_dispatch<'a>(&'a self) -> Box<dyn ErrorListener<'input, Self> + 'a>
     where
@@ -188,10 +183,7 @@ where
     type Node = Ctx;
 
     fn sempred(
-        &mut self,
-        localctx: Option<&Ctx::Type>,
-        rule_index: isize,
-        action_index: isize,
+        &mut self, localctx: Option<&Ctx::Type>, rule_index: isize, action_index: isize,
     ) -> bool {
         <Ext as Actions<'input, Self>>::sempred(localctx, rule_index, action_index, self)
     }
@@ -296,10 +288,7 @@ where
     fn remove_error_listeners(&mut self) { self.error_listeners.borrow_mut().clear(); }
 
     fn notify_error_listeners(
-        &self,
-        msg: String,
-        offending_token: Option<isize>,
-        err: Option<&ANTLRError>,
+        &self, msg: String, offending_token: Option<isize>, err: Option<&ANTLRError>,
     ) {
         self._syntax_errors.update(|it| it + 1);
         let offending_token: Option<&_> = match offending_token {
@@ -384,9 +373,7 @@ where
 
     #[inline]
     pub fn match_token(
-        &mut self,
-        ttype: isize,
-        err_handler: &mut impl ErrorStrategy<'input, Self>,
+        &mut self, ttype: isize, err_handler: &mut impl ErrorStrategy<'input, Self>,
     ) -> Result<<I::TF as TokenFactory<'input>>::Tok, ANTLRError> {
         let mut token = self.get_current_token().clone();
         if token.borrow().get_token_type() == ttype {
@@ -410,8 +397,7 @@ where
 
     #[inline]
     pub fn match_wildcard(
-        &mut self,
-        err_handler: &mut impl ErrorStrategy<'input, Self>,
+        &mut self, err_handler: &mut impl ErrorStrategy<'input, Self>,
     ) -> Result<<I::TF as TokenFactory<'input>>::Tok, ANTLRError> {
         let mut t = self.get_current_token().clone();
         if t.borrow().get_token_type() > 0 {
@@ -549,11 +535,7 @@ where
     }
 
     pub fn enter_recursion_rule(
-        &mut self,
-        localctx: Rc<Ctx::Type>,
-        state: isize,
-        _rule_index: usize,
-        precedence: isize,
+        &mut self, localctx: Rc<Ctx::Type>, state: isize, _rule_index: usize, precedence: isize,
     ) {
         self.set_state(state);
         self.precedence_stack.push(precedence);
@@ -563,10 +545,7 @@ where
     }
 
     pub fn push_new_recursion_context(
-        &mut self,
-        localctx: Rc<Ctx::Type>,
-        state: isize,
-        _rule_index: usize,
+        &mut self, localctx: Rc<Ctx::Type>, state: isize, _rule_index: usize,
     ) {
         let prev = self.ctx.take().unwrap();
         prev.set_parent(&Some(localctx.clone()));
@@ -608,15 +587,13 @@ where
     }
 
     fn create_token_node(
-        &self,
-        token: <I::TF as TokenFactory<'input>>::Tok,
+        &self, token: <I::TF as TokenFactory<'input>>::Tok,
     ) -> Rc<TerminalNode<'input, Ctx>> {
         TerminalNode::new(token).into()
     }
 
     fn create_error_node(
-        &self,
-        token: <I::TF as TokenFactory<'input>>::Tok,
+        &self, token: <I::TF as TokenFactory<'input>>::Tok,
     ) -> Rc<ErrorNode<'input, Ctx>> {
         ErrorNode::new(token).into()
     }

@@ -7,7 +7,6 @@
 #![feature(specialization)]
 #![feature(coerce_unsized)]
 #![feature(associated_type_defaults)]
-#![feature(generic_associated_types)]
 // #![feature(generic_associated_types)]
 #![warn(rust_2018_idioms)]
 #![warn(missing_docs)] // warn if there is missing docs

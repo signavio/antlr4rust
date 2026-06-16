@@ -40,7 +40,7 @@ pub const ID: isize = 1;
 pub const ATN: isize = 2;
 pub const WS: isize = 3;
 pub const RULE_a: usize = 0;
-pub const ruleNames: [&'static str; 1] = ["a"];
+pub const ruleNames: [&str; 1] = ["a"];
 
 pub const _LITERAL_NAMES: [Option<&'static str>; 0] = [];
 pub const _SYMBOLIC_NAMES: [Option<&'static str>; 4] = [None, Some("ID"), Some("ATN"), Some("WS")];
@@ -231,8 +231,7 @@ antlr_rust::type_id! {AContextExt<'a>}
 
 impl<'input> AContextExt<'input> {
     fn new(
-        parent: Option<Rc<dyn ReferenceToATNParserContext<'input> + 'input>>,
-        invoking_state: isize,
+        parent: Option<Rc<dyn ReferenceToATNParserContext<'input> + 'input>>, invoking_state: isize,
     ) -> Rc<AContextAll<'input>> {
         Rc::new(BaseParserRuleContext::new_parser_ctx(
             parent,
@@ -299,13 +298,13 @@ where
                 recog.base.set_state(5);
                 recog.err_handler.sync(&mut recog.base)?;
                 _alt = recog.interpreter.adaptive_predict(0, &mut recog.base)?;
-                while { _alt != 2 && _alt != INVALID_ALT } {
+                while _alt != 2 && _alt != INVALID_ALT {
                     if _alt == 1 {
                         {
                             {
                                 recog.base.set_state(2);
                                 _la = recog.base.input.la(1);
-                                if { !(_la == ID || _la == ATN) } {
+                                if !(_la == ID || _la == ATN) {
                                     recog.err_handler.recover_inline(&mut recog.base)?;
                                 } else {
                                     if recog.base.input.la(1) == TOKEN_EOF {
@@ -373,7 +372,7 @@ lazy_static! {
     };
 }
 
-const _serializedATN: &'static str =
+const _serializedATN: &str =
     "\x03\u{608b}\u{a72a}\u{8133}\u{b9ed}\u{417c}\u{3be7}\u{7786}\u{5964}\x03\
 	\x05\x10\x04\x02\x09\x02\x03\x02\x07\x02\x06\x0a\x02\x0c\x02\x0e\x02\x09\
 	\x0b\x02\x03\x02\x05\x02\x0c\x0a\x02\x03\x02\x03\x02\x03\x02\x02\x02\x03\

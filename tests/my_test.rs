@@ -1,6 +1,6 @@
 #![feature(try_blocks)]
 #![feature(inner_deref)]
-#![feature(specialization)]
+#![feature(min_specialization)]
 #![feature(coerce_unsized)]
 //! Integration tests
 
@@ -20,8 +20,7 @@ mod gen {
     use antlr_rust::token_factory::{ArenaCommonFactory, OwningTokenFactory};
     use antlr_rust::token_stream::{TokenStream, UnbufferedTokenStream};
     use antlr_rust::tree::{
-        ParseTree, ParseTreeListener, ParseTreeVisitor, ParseTreeWalker, TerminalNode, Tree,
-        VisitChildren, Visitable,
+        ParseTree, ParseTreeListener, ParseTreeVisitor, TerminalNode, Visitable,
     };
     use antlr_rust::InputStream;
     use csvlexer::*;
@@ -119,7 +118,7 @@ if (x < x && a > 0) then duh
         println!("test started lexer_test_csv");
         let tf = ArenaCommonFactory::default();
         let mut _lexer = CSVLexer::new_with_token_factory(
-            InputStream::new("V123,V2\nd1,d222".into()),
+            InputStream::new("V123,V2\nd1,d222"),
             // Box::new(UTF16InputStream::from_str("V123,V2\nd1,d222","".into())),
             &tf,
         );
@@ -180,7 +179,7 @@ if (x < x && a > 0) then duh
         println!("test started");
         let tf = ArenaCommonFactory::default();
         let mut _lexer =
-            CSVLexer::new_with_token_factory(InputStream::new("V123,V2\nd1,d2\n".into()), &tf);
+            CSVLexer::new_with_token_factory(InputStream::new("V123,V2\nd1,d2\n"), &tf);
         let token_source = CommonTokenStream::new(_lexer);
         let mut parser = CSVParser::new(token_source);
         parser.add_parse_listener(Box::new(Listener {}));
@@ -256,7 +255,7 @@ if (x < x && a > 0) then duh
 
     #[test]
     fn test_lr() {
-        let mut _lexer = SimpleLRLexer::new(InputStream::new("x y z".into()));
+        let mut _lexer = SimpleLRLexer::new(InputStream::new("x y z"));
         let token_source = CommonTokenStream::new(_lexer);
         let mut parser = SimpleLRParser::new(token_source);
         parser.add_parse_listener(Box::new(Listener3));
@@ -267,7 +266,7 @@ if (x < x && a > 0) then duh
 
     #[test]
     fn test_immediate_lr() {
-        let mut _lexer = SimpleLRLexer::new(InputStream::new("x y z".into()));
+        let mut _lexer = SimpleLRLexer::new(InputStream::new("x y z"));
         let token_source = CommonTokenStream::new(_lexer);
         let mut parser = SimpleLRParser::new(token_source);
         parser.add_parse_listener(Box::new(Listener3));
@@ -299,7 +298,7 @@ if (x < x && a > 0) then duh
 
     #[test]
     fn test_remove_listener() {
-        let mut _lexer = SimpleLRLexer::new(InputStream::new("x y z".into()));
+        let mut _lexer = SimpleLRLexer::new(InputStream::new("x y z"));
         let token_source = CommonTokenStream::new(_lexer);
         let mut parser = SimpleLRParser::new(token_source);
         parser.add_parse_listener(Box::new(Listener3));
@@ -380,7 +379,7 @@ if (x < x && a > 0) then duh
     fn test_visitor() {
         fn parse<'a>(tf: &'a ArenaCommonFactory<'a>) -> Rc<CsvFileContext<'a>> {
             let mut _lexer =
-                CSVLexer::new_with_token_factory(InputStream::new("h1,h2\nd1,d2\nd3\n".into()), tf);
+                CSVLexer::new_with_token_factory(InputStream::new("h1,h2\nd1,d2\nd3\n"), tf);
             let token_source = CommonTokenStream::new(_lexer);
             let mut parser = CSVParser::new(token_source);
             let result = parser.csvFile().expect("parsed unsuccessfully");

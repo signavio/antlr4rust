@@ -25,53 +25,32 @@ pub trait ErrorListener<'a, T: Recognizer<'a>> {
     /// in-line, without returning from the surrounding rule (via the single
     /// token insertion and deletion mechanism)
     fn syntax_error(
-        &self,
-        _recognizer: &T,
-        _offending_symbol: Option<&<T::TF as TokenFactory<'a>>::Inner>,
-        _line: isize,
-        _column: isize,
-        _msg: &str,
-        _error: Option<&ANTLRError>,
+        &self, _recognizer: &T, _offending_symbol: Option<&<T::TF as TokenFactory<'a>>::Inner>,
+        _line: isize, _column: isize, _msg: &str, _error: Option<&ANTLRError>,
     ) {
     }
 
     /// This method is called by the parser when a full-context prediction
     /// results in an ambiguity.
     fn report_ambiguity(
-        &self,
-        _recognizer: &T,
-        _dfa: &DFA,
-        _start_index: isize,
-        _stop_index: isize,
-        _exact: bool,
-        _ambig_alts: &BitSet,
-        _configs: &ATNConfigSet,
+        &self, _recognizer: &T, _dfa: &DFA, _start_index: isize, _stop_index: isize, _exact: bool,
+        _ambig_alts: &BitSet, _configs: &ATNConfigSet,
     ) {
     }
 
     /// This method is called when an SLL conflict occurs and the parser is about
     /// to use the full context information to make an LL decision.
     fn report_attempting_full_context(
-        &self,
-        _recognizer: &T,
-        _dfa: &DFA,
-        _start_index: isize,
-        _stop_index: isize,
-        _conflicting_alts: &BitSet,
-        _configs: &ATNConfigSet,
+        &self, _recognizer: &T, _dfa: &DFA, _start_index: isize, _stop_index: isize,
+        _conflicting_alts: &BitSet, _configs: &ATNConfigSet,
     ) {
     }
 
     /// This method is called by the parser when a full-context prediction has a
     /// unique result.
     fn report_context_sensitivity(
-        &self,
-        _recognizer: &T,
-        _dfa: &DFA,
-        _start_index: isize,
-        _stop_index: isize,
-        _prediction: isize,
-        _configs: &ATNConfigSet,
+        &self, _recognizer: &T, _dfa: &DFA, _start_index: isize, _stop_index: isize,
+        _prediction: isize, _configs: &ATNConfigSet,
     ) {
     }
 }
@@ -82,13 +61,8 @@ pub struct ConsoleErrorListener {}
 
 impl<'a, T: Recognizer<'a>> ErrorListener<'a, T> for ConsoleErrorListener {
     fn syntax_error(
-        &self,
-        _recognizer: &T,
-        _offending_symbol: Option<&<T::TF as TokenFactory<'a>>::Inner>,
-        line: isize,
-        column: isize,
-        msg: &str,
-        _e: Option<&ANTLRError>,
+        &self, _recognizer: &T, _offending_symbol: Option<&<T::TF as TokenFactory<'a>>::Inner>,
+        line: isize, column: isize, msg: &str, _e: Option<&ANTLRError>,
     ) {
         eprintln!("line {}:{} {}", line, column, msg);
     }
@@ -101,13 +75,8 @@ pub(crate) struct ProxyErrorListener<'b, 'a, T> {
 
 impl<'b, 'a, T: Recognizer<'a>> ErrorListener<'a, T> for ProxyErrorListener<'b, 'a, T> {
     fn syntax_error(
-        &self,
-        _recognizer: &T,
-        offending_symbol: Option<&<T::TF as TokenFactory<'a>>::Inner>,
-        line: isize,
-        column: isize,
-        msg: &str,
-        e: Option<&ANTLRError>,
+        &self, _recognizer: &T, offending_symbol: Option<&<T::TF as TokenFactory<'a>>::Inner>,
+        line: isize, column: isize, msg: &str, e: Option<&ANTLRError>,
     ) {
         for listener in self.delegates.deref() {
             listener.syntax_error(_recognizer, offending_symbol, line, column, msg, e)
@@ -115,14 +84,8 @@ impl<'b, 'a, T: Recognizer<'a>> ErrorListener<'a, T> for ProxyErrorListener<'b, 
     }
 
     fn report_ambiguity(
-        &self,
-        recognizer: &T,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        exact: bool,
-        ambig_alts: &BitSet<u32>,
-        configs: &ATNConfigSet,
+        &self, recognizer: &T, dfa: &DFA, start_index: isize, stop_index: isize, exact: bool,
+        ambig_alts: &BitSet<u32>, configs: &ATNConfigSet,
     ) {
         for listener in self.delegates.deref() {
             listener.report_ambiguity(
@@ -138,13 +101,8 @@ impl<'b, 'a, T: Recognizer<'a>> ErrorListener<'a, T> for ProxyErrorListener<'b, 
     }
 
     fn report_attempting_full_context(
-        &self,
-        recognizer: &T,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        conflicting_alts: &BitSet<u32>,
-        configs: &ATNConfigSet,
+        &self, recognizer: &T, dfa: &DFA, start_index: isize, stop_index: isize,
+        conflicting_alts: &BitSet<u32>, configs: &ATNConfigSet,
     ) {
         for listener in self.delegates.deref() {
             listener.report_attempting_full_context(
@@ -159,12 +117,7 @@ impl<'b, 'a, T: Recognizer<'a>> ErrorListener<'a, T> for ProxyErrorListener<'b, 
     }
 
     fn report_context_sensitivity(
-        &self,
-        recognizer: &T,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        prediction: isize,
+        &self, recognizer: &T, dfa: &DFA, start_index: isize, stop_index: isize, prediction: isize,
         configs: &ATNConfigSet,
     ) {
         for listener in self.delegates.deref() {
@@ -219,9 +172,7 @@ impl DiagnosticErrorListener {
     /// configuration set, if that information was not already provided by the
     /// parser in `alts`.
     pub fn get_conflicting_alts<'a>(
-        &self,
-        alts: Option<&'a BitSet>,
-        _configs: &ATNConfigSet,
+        &self, alts: Option<&'a BitSet>, _configs: &ATNConfigSet,
     ) -> Cow<'a, BitSet> {
         match alts {
             Some(alts) => Cow::Borrowed(alts),
@@ -238,14 +189,8 @@ impl DiagnosticErrorListener {
 
 impl<'a, T: Parser<'a>> ErrorListener<'a, T> for DiagnosticErrorListener {
     fn report_ambiguity(
-        &self,
-        recognizer: &T,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        exact: bool,
-        ambig_alts: &BitSet<u32>,
-        _configs: &ATNConfigSet,
+        &self, recognizer: &T, dfa: &DFA, start_index: isize, stop_index: isize, exact: bool,
+        ambig_alts: &BitSet<u32>, _configs: &ATNConfigSet,
     ) {
         if self.exact_only && !exact {
             return;
@@ -262,13 +207,8 @@ impl<'a, T: Parser<'a>> ErrorListener<'a, T> for DiagnosticErrorListener {
     }
 
     fn report_attempting_full_context(
-        &self,
-        recognizer: &T,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        _conflicting_alts: &BitSet<u32>,
-        _configs: &ATNConfigSet,
+        &self, recognizer: &T, dfa: &DFA, start_index: isize, stop_index: isize,
+        _conflicting_alts: &BitSet<u32>, _configs: &ATNConfigSet,
     ) {
         let msg = format!(
             "reportAttemptingFullContext d={}, input='{}'",
@@ -281,13 +221,8 @@ impl<'a, T: Parser<'a>> ErrorListener<'a, T> for DiagnosticErrorListener {
     }
 
     fn report_context_sensitivity(
-        &self,
-        recognizer: &T,
-        dfa: &DFA,
-        start_index: isize,
-        stop_index: isize,
-        _prediction: isize,
-        _configs: &ATNConfigSet,
+        &self, recognizer: &T, dfa: &DFA, start_index: isize, stop_index: isize,
+        _prediction: isize, _configs: &ATNConfigSet,
     ) {
         let msg = format!(
             "reportContextSensitivity d={}, input='{}'",

@@ -84,8 +84,7 @@ impl PredictionMode {
 //
 //
 pub(crate) fn has_sll_conflict_terminating_prediction(
-    mode: PredictionMode,
-    configs: &ATNConfigSet,
+    mode: PredictionMode, configs: &ATNConfigSet,
 ) -> bool {
     //    if all_configs_in_rule_stop_states(configs) {
     //        return true          checked outside

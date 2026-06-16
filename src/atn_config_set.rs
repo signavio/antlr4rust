@@ -130,9 +130,7 @@ impl ATNConfigSet {
     }
 
     pub fn add_cached(
-        &mut self,
-        config: Box<ATNConfig>,
-        mut merge_cache: Option<&mut MergeCache>,
+        &mut self, config: Box<ATNConfig>, mut merge_cache: Option<&mut MergeCache>,
     ) -> bool {
         assert!(!self.read_only);
 

@@ -425,8 +425,7 @@ impl<'input, Ctx: CustomRuleContext<'input> + TidAble<'input>> ParseTree<'input>
 #[allow(missing_docs)]
 impl<'input, Ctx: CustomRuleContext<'input> + 'input> BaseParserRuleContext<'input, Ctx> {
     pub fn new_parser_ctx(
-        parent_ctx: Option<Rc<<Ctx::Ctx as ParserNodeType<'input>>::Type>>,
-        invoking_state: isize,
+        parent_ctx: Option<Rc<<Ctx::Ctx as ParserNodeType<'input>>::Type>>, invoking_state: isize,
         ext: Ctx,
     ) -> Self {
         Self {
@@ -438,8 +437,7 @@ impl<'input, Ctx: CustomRuleContext<'input> + 'input> BaseParserRuleContext<'inp
         }
     }
     pub fn copy_from<T: ParserRuleContext<'input, TF = Ctx::TF, Ctx = Ctx::Ctx> + ?Sized>(
-        ctx: &T,
-        ext: Ctx,
+        ctx: &T, ext: Ctx,
     ) -> Self {
         Self {
             base: BaseRuleContext::new_parser_ctx(

@@ -207,7 +207,7 @@ pub fn cast_mut<'a, T: ParserRuleContext<'a> + 'a + ?Sized, Result: 'a>(
     //    if Rc::strong_count(ctx) != 1 { panic!("cant mutate Rc with multiple strong ref count"); }
     // is it safe because parser does not save/move mutable references anywhere.
     // they are only used to write data immediately in the corresponding expression
-    unsafe { &mut *(Rc::get_mut_unchecked(ctx) as *mut T as *mut Result) }
+    unsafe { &mut *(Rc::get_mut(ctx).unwrap_unchecked() as *mut T as *mut Result) }
 }
 
 // workaround newtype for cycle in trait definition
@@ -240,7 +240,7 @@ pub struct BaseParserRuleContext<'input, Ctx: CustomRuleContext<'input>> {
 }
 
 impl<'input, Ctx: CustomRuleContext<'input>> Debug for BaseParserRuleContext<'input, Ctx> {
-    default fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         f.write_str(type_name::<Self>())
     }
 }
@@ -410,8 +410,7 @@ impl<'input, Ctx: CustomRuleContext<'input> + TidAble<'input>> ParseTree<'input>
             b: self.stop().get_token_index(),
         }
     }
-
-    default fn get_text(&self) -> String {
+    fn get_text(&self) -> String {
         let children = self.get_children();
         let mut result = String::new();
 

@@ -8,22 +8,20 @@ use std::marker::PhantomData;
 use std::ops::{CoerceUnsized, Deref};
 use std::rc::Rc;
 
-use crate::atn::INVALID_ALT;
 use crate::char_stream::InputData;
 use crate::int_stream::EOF;
 use crate::interval_set::Interval;
 use crate::parser::ParserNodeType;
 use crate::parser_rule_context::{ParserRuleContext, RuleContextExt};
-use crate::recognizer::Recognizer;
 use crate::rule_context::{CustomRuleContext, RuleContext};
 use crate::token::Token;
 use crate::token_factory::TokenFactory;
-use crate::{interval_set, trees};
+use crate::interval_set;
 use better_any::{Tid, TidAble};
 
 //todo try to make in more generic
 #[allow(missing_docs)]
-pub trait Tree<'input>: NodeText + RuleContext<'input> {
+pub trait Tree<'input>: RuleContext<'input> {
     fn get_parent(&self) -> Option<Rc<<Self::Ctx as ParserNodeType<'input>>::Type>> { None }
     fn has_parent(&self) -> bool { false }
     fn get_payload(&self) -> Box<dyn Any> { unimplemented!() }
@@ -69,39 +67,6 @@ pub trait ParseTree<'input>: Tree<'input> {
     ///	method.
     fn get_text(&self) -> String { String::new() }
 
-    /// Print out a whole tree, not just a node, in LISP format
-    /// (root child1 .. childN). Print just a node if this is a leaf.
-    /// We have to know the recognizer so we can get rule names.
-    fn to_string_tree(
-        &self,
-        r: &dyn Recognizer<'input, TF = Self::TF, Node = Self::Ctx>,
-    ) -> String {
-        trees::string_tree(self, r.get_rule_names())
-    }
-}
-
-/// text of the node.
-/// Already implemented for all rule contexts
-pub trait NodeText {
-    /// Returns text representation of current node type,
-    /// rule name for context nodes and token text for terminal nodes
-    fn get_node_text(&self, rule_names: &[&str]) -> String;
-}
-
-impl<T> NodeText for T {
-    default fn get_node_text(&self, _rule_names: &[&str]) -> String { "<unknown>".to_owned() }
-}
-
-impl<'input, T: CustomRuleContext<'input>> NodeText for T {
-    default fn get_node_text(&self, rule_names: &[&str]) -> String {
-        let rule_index = self.get_rule_index();
-        let rule_name = rule_names[rule_index];
-        let alt_number = self.get_alt_number();
-        if alt_number != INVALID_ALT {
-            return format!("{}:{}", rule_name, alt_number);
-        }
-        return rule_name.to_owned();
-    }
 }
 
 #[doc(hidden)]
@@ -139,12 +104,6 @@ impl<'input, Node: ParserNodeType<'input>, T: 'static> Tree<'input> for LeafNode
 impl<'input, Node: ParserNodeType<'input>, T: 'static> RuleContext<'input>
     for LeafNode<'input, Node, T>
 {
-}
-
-impl<'input, Node: ParserNodeType<'input>, T: 'static> NodeText for LeafNode<'input, Node, T> {
-    fn get_node_text(&self, _rule_names: &[&str]) -> String {
-        self.symbol.borrow().get_text().to_display()
-    }
 }
 
 impl<'input, Node: ParserNodeType<'input>, T: 'static> ParseTree<'input>

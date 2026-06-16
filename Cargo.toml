@@ -12,7 +12,7 @@ license = "BSD-3-Clause"
 keywords = ["ANTLR","ANTLR4","parsing","runtime"]
 categories = ["parsing"]
 exclude = ["/build.rs","/grammars","/templates"]
-
+publish = false
 
 [dependencies]
 lazy_static = "^1.4"
